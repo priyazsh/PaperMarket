@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Paper Market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 min-h-screen flex items-center justify-center p-4">
+    <!-- Register Container -->
+    <div class="w-full max-w-md">
+        <!-- Logo & Title -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-4">
+                <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-slate-100 mb-2">Paper Market</h1>
+            <p class="text-slate-400">Start your paper trading journey today</p>
+        </div>
+
+        <!-- Register Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-8">
+            <h2 class="text-xl font-semibold text-slate-100 mb-6">Create your account</h2>
+            
+            <!-- Register Form -->
+            <form class="space-y-5" onsubmit="handleRegistration(event)">
+                <!-- Full Name Field -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        required
+                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        placeholder="John Doe"
+                    >
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        required
+                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        placeholder="you@example.com"
+                    >
+                </div>
+
+                <!-- Phone Number Field -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        required
+                        pattern="[0-9]{10}"
+                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        placeholder="9876543210"
+                    >
+                    <p class="text-xs text-slate-500 mt-1">Enter 10-digit mobile number</p>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required
+                        minlength="8"
+                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        placeholder="••••••••"
+                    >
+                    <p class="text-xs text-slate-500 mt-1">Minimum 8 characters</p>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-slate-300 mb-2">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        required
+                        minlength="8"
+                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        placeholder="••••••••"
+                    >
+                </div>
+
+                <!-- Initial Deposit -->
+                <div>
+                    <label for="initialDeposit" class="block text-sm font-medium text-slate-300 mb-2">Initial Deposit (Optional)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
+                        <input 
+                            type="number" 
+                            id="initialDeposit" 
+                            min="0"
+                            value="100000"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                            placeholder="100000"
+                        >
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Start with virtual trading capital</p>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div>
+                    <label class="flex items-start">
+                        <input type="checkbox" required class="w-4 h-4 mt-0.5 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0">
+                        <span class="ml-2 text-sm text-slate-400">
+                            I agree to the <a href="#" class="text-emerald-500 hover:text-emerald-400">Terms of Service</a> and 
+                            <a href="#" class="text-emerald-500 hover:text-emerald-400">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Sign Up Button -->
+                <button 
+                    type="submit" 
+                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg transition-colors shadow-lg shadow-emerald-500/20"
+                >
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-800"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-slate-900 text-slate-500">Or sign up with</span>
+                </div>
+            </div>
+
+            <!-- Social Registration Buttons -->
+            <div class="grid grid-cols-2 gap-3">
+                <button class="flex items-center justify-center px-4 py-3 border border-slate-800 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+                    </svg>
+                    Google
+                </button>
+                <button class="flex items-center justify-center px-4 py-3 border border-slate-800 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                    GitHub
+                </button>
+            </div>
+
+            <!-- Sign In Link -->
+            <p class="text-center text-sm text-slate-400 mt-6">
+                Already have an account? 
+                <a href="login.html" class="text-emerald-500 hover:text-emerald-400 font-medium transition-colors">Sign in</a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-sm text-slate-500">
+            <p>&copy; 2026 Paper Market. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-emerald-500/30 rounded-2xl max-w-md w-full p-8 text-center">
+            <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-100 mb-2">Account Created!</h3>
+            <p class="text-slate-400 mb-6">Your paper trading account has been successfully created with <span id="depositAmount" class="text-emerald-400 font-semibold">₹1,00,000</span> virtual capital.</p>
+            <a href="dashboard.html" class="inline-block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const initialDeposit = document.getElementById('initialDeposit').value || 100000;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Validate phone number
+            if (phone.length !== 10) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            // Store user data (in real app, this would go to backend)
+            const userData = {
+                fullName,
+                email,
+                phone,
+                initialDeposit,
+                registeredAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('paperMarketUser', JSON.stringify(userData));
+            
+            // Update modal with deposit amount
+            document.getElementById('depositAmount').textContent = 
+                `₹${parseInt(initialDeposit).toLocaleString('en-IN')}`;
+            
+            // Show success modal
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        // Handle Enter key in form
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                const form = document.querySelector('form');
+                if (form && document.activeElement.form === form) {
+                    // Let the form handle it
+                }
+            }
+        });
+    </script>
+</body>
+</html>

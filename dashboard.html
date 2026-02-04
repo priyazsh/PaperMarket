@@ -77,6 +77,14 @@
                         <p class="text-sm text-slate-400 mt-1">Welcome back, John</p>
                     </div>
                     <div class="flex items-center space-x-4">
+                        <!-- Add Funds Button -->
+                        <button onclick="openAddFundsModal()" class="flex items-center space-x-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium text-white transition-colors shadow-lg shadow-emerald-500/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            <span>Add Funds</span>
+                        </button>
+                        
                         <!-- Market Status -->
                         <div class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                             <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -278,6 +286,113 @@
                     </div>
                 </div>
 
+                <!-- Funds Management Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Quick Deposit -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-slate-100 mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Quick Deposit
+                        </h2>
+                        <div class="space-y-3">
+                            <button onclick="quickDeposit(10000)" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 rounded-lg text-slate-100 font-medium transition-all">
+                                + ₹10,000
+                            </button>
+                            <button onclick="quickDeposit(25000)" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 rounded-lg text-slate-100 font-medium transition-all">
+                                + ₹25,000
+                            </button>
+                            <button onclick="quickDeposit(50000)" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 rounded-lg text-slate-100 font-medium transition-all">
+                                + ₹50,000
+                            </button>
+                            <button onclick="quickDeposit(100000)" class="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 rounded-lg text-slate-100 font-medium transition-all">
+                                + ₹1,00,000
+                            </button>
+                            <button onclick="openAddFundsModal()" class="w-full px-4 py-3 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 rounded-lg text-emerald-400 font-medium transition-all">
+                                Custom Amount
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Available Funds & Limits -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-slate-100 mb-4">Fund Details</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm text-slate-400 mb-1">Available Cash</p>
+                                <p class="text-2xl font-bold text-emerald-400" id="availableCash">₹45,450</p>
+                            </div>
+                            <div class="h-px bg-slate-800"></div>
+                            <div>
+                                <p class="text-sm text-slate-400 mb-1">Total Deposits</p>
+                                <p class="text-lg font-semibold text-slate-100" id="totalDeposits">₹1,20,000</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-400 mb-1">Total Withdrawals</p>
+                                <p class="text-lg font-semibold text-slate-100" id="totalWithdrawals">₹0</p>
+                            </div>
+                            <div class="h-px bg-slate-800"></div>
+                            <div>
+                                <p class="text-sm text-slate-400 mb-1">Current Margin Used</p>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-lg font-semibold text-slate-100">₹80,000</p>
+                                    <span class="text-xs text-slate-500">66.67%</span>
+                                </div>
+                                <div class="mt-2 h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-emerald-500" style="width: 66.67%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Fund Transactions -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-slate-100 mb-4">Recent Fund Transactions</h2>
+                        <div class="space-y-3" id="fundTransactions">
+                            <div class="flex items-center justify-between py-2 border-b border-slate-800">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-emerald-400">Deposit</p>
+                                        <p class="text-xs text-slate-500">Initial deposit</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-emerald-400">+₹1,00,000</p>
+                                    <p class="text-xs text-slate-500">Jan 15</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-slate-800">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-emerald-400">Deposit</p>
+                                        <p class="text-xs text-slate-500">Top up</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-emerald-400">+₹20,000</p>
+                                    <p class="text-xs text-slate-500">Jan 28</p>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <button class="text-sm text-emerald-500 hover:text-emerald-400 transition-colors">
+                                    View All Transactions →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Market Overview -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
                     <h2 class="text-lg font-semibold text-slate-100 mb-4">Market Overview</h2>
@@ -307,5 +422,260 @@
             </div>
         </main>
     </div>
+
+    <!-- Add Funds Modal -->
+    <div id="addFundsModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-slate-800">
+                <h2 class="text-xl font-bold text-slate-100">Add Funds</h2>
+                <button onclick="closeAddFundsModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- Current Balance -->
+                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
+                    <p class="text-sm text-slate-400 mb-1">Current Balance</p>
+                    <p class="text-2xl font-bold text-slate-100" id="modalCurrentBalance">₹1,25,450</p>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Enter Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
+                        <input 
+                            type="number" 
+                            id="depositAmount" 
+                            placeholder="0" 
+                            min="100"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 text-lg font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                        >
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Minimum deposit: ₹100</p>
+                </div>
+
+                <!-- Quick Amount Buttons -->
+                <div class="grid grid-cols-4 gap-2 mb-6">
+                    <button onclick="setDepositAmount(5000)" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm font-medium text-slate-300 transition-colors">
+                        +5K
+                    </button>
+                    <button onclick="setDepositAmount(10000)" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm font-medium text-slate-300 transition-colors">
+                        +10K
+                    </button>
+                    <button onclick="setDepositAmount(25000)" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm font-medium text-slate-300 transition-colors">
+                        +25K
+                    </button>
+                    <button onclick="setDepositAmount(50000)" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm font-medium text-slate-300 transition-colors">
+                        +50K
+                    </button>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-3">Payment Method</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 p-3 bg-slate-800 border border-emerald-500/30 rounded-lg cursor-pointer">
+                            <input type="radio" name="paymentMethod" value="upi" checked class="w-4 h-4 text-emerald-500">
+                            <div class="flex items-center space-x-2 flex-1">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-slate-100">UPI</span>
+                            </div>
+                            <span class="text-xs text-emerald-500 font-medium">Instant</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-slate-800 border border-slate-700 rounded-lg cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="paymentMethod" value="netbanking" class="w-4 h-4 text-emerald-500">
+                            <div class="flex items-center space-x-2 flex-1">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-slate-100">Net Banking</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-slate-800 border border-slate-700 rounded-lg cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="paymentMethod" value="card" class="w-4 h-4 text-emerald-500">
+                            <div class="flex items-center space-x-2 flex-1">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-slate-100">Debit/Credit Card</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-3">
+                    <button onclick="closeAddFundsModal()" class="flex-1 px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="processFundDeposit()" class="flex-1 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium transition-colors shadow-lg shadow-emerald-500/20">
+                        Add Funds
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="successNotification" class="hidden fixed top-4 right-4 z-50 bg-slate-900 border border-emerald-500/30 rounded-lg shadow-2xl shadow-emerald-500/10 p-4 max-w-sm">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-emerald-500/10 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-slate-100" id="notificationTitle">Funds Added Successfully!</p>
+                <p class="text-xs text-slate-400 mt-0.5" id="notificationMessage">₹10,000 has been added to your account</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentBalance = 125450;
+        let availableCash = 45450;
+        let totalDeposits = 120000;
+
+        // Open/Close Modal Functions
+        function openAddFundsModal() {
+            document.getElementById('addFundsModal').classList.remove('hidden');
+            document.getElementById('depositAmount').value = '';
+            document.getElementById('depositAmount').focus();
+        }
+
+        function closeAddFundsModal() {
+            document.getElementById('addFundsModal').classList.add('hidden');
+        }
+
+        // Set deposit amount from quick buttons
+        function setDepositAmount(amount) {
+            const input = document.getElementById('depositAmount');
+            const currentValue = parseInt(input.value) || 0;
+            input.value = currentValue + amount;
+        }
+
+        // Quick deposit function
+        function quickDeposit(amount) {
+            currentBalance += amount;
+            availableCash += amount;
+            totalDeposits += amount;
+            
+            updateBalanceDisplay();
+            showSuccessNotification(`₹${amount.toLocaleString('en-IN')} added successfully!`, `New balance: ₹${currentBalance.toLocaleString('en-IN')}`);
+            addFundTransaction(amount, 'Quick Deposit');
+        }
+
+        // Process fund deposit from modal
+        function processFundDeposit() {
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            
+            if (!amount || amount < 100) {
+                alert('Please enter a valid amount (minimum ₹100)');
+                return;
+            }
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            // Simulate payment processing
+            const modal = document.getElementById('addFundsModal');
+            modal.classList.add('hidden');
+            
+            // Update balances
+            currentBalance += amount;
+            availableCash += amount;
+            totalDeposits += amount;
+            
+            updateBalanceDisplay();
+            showSuccessNotification(
+                `₹${amount.toLocaleString('en-IN')} added successfully!`,
+                `Payment via ${paymentMethod.toUpperCase()}`
+            );
+            addFundTransaction(amount, `Deposit via ${paymentMethod}`);
+        }
+
+        // Update all balance displays
+        function updateBalanceDisplay() {
+            // Update main balance card
+            document.querySelectorAll('.text-3xl.font-bold.text-slate-100')[0].textContent = 
+                `₹${currentBalance.toLocaleString('en-IN')}`;
+            
+            // Update available cash
+            document.getElementById('availableCash').textContent = 
+                `₹${availableCash.toLocaleString('en-IN')}`;
+            
+            // Update total deposits
+            document.getElementById('totalDeposits').textContent = 
+                `₹${totalDeposits.toLocaleString('en-IN')}`;
+            
+            // Update modal balance
+            document.getElementById('modalCurrentBalance').textContent = 
+                `₹${currentBalance.toLocaleString('en-IN')}`;
+        }
+
+        // Show success notification
+        function showSuccessNotification(title, message) {
+            const notification = document.getElementById('successNotification');
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationMessage').textContent = message;
+            
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Add fund transaction to history
+        function addFundTransaction(amount, description) {
+            const transactionList = document.getElementById('fundTransactions');
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+            
+            const transactionHTML = `
+                <div class="flex items-center justify-between py-2 border-b border-slate-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-emerald-400">Deposit</p>
+                            <p class="text-xs text-slate-500">${description}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-emerald-400">+₹${amount.toLocaleString('en-IN')}</p>
+                        <p class="text-xs text-slate-500">${dateStr}</p>
+                    </div>
+                </div>
+            `;
+            
+            transactionList.insertAdjacentHTML('afterbegin', transactionHTML);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAddFundsModal();
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('addFundsModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'addFundsModal') {
+                closeAddFundsModal();
+            }
+        });
+    </script>
 </body>
 </html>
