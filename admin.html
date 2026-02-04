@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Paper Market</title>
+    <script src="tailwindcss.js"></script>
+</head>
+<body class="bg-slate-950 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 border-b border-slate-800">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-slate-100">Paper Market</span>
+                        <p class="text-xs text-amber-500 font-medium">ADMIN PANEL</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="#" onclick="showSection('pending')" class="flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Pending Approvals</span>
+                    <span id="pending-count" class="ml-auto bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                </a>
+
+                <a href="#" onclick="showSection('approved')" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Approved Accounts</span>
+                </a>
+
+                <a href="#" onclick="showSection('rejected')" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Rejected Accounts</span>
+                </a>
+            </nav>
+
+            <!-- Admin Profile -->
+            <div class="p-4 border-t border-slate-800">
+                <div class="flex items-center space-x-3 px-4 py-3 bg-slate-800 rounded-lg">
+                    <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold text-white">AD</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-slate-100">Admin</p>
+                        <p class="text-xs text-slate-500">admin@papermarket.com</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="w-full mt-3 px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-100 text-sm rounded-lg transition-colors flex items-center justify-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Header -->
+            <header class="bg-slate-900 border-b border-slate-800 px-8 py-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-100">Account Management</h1>
+                        <p class="text-sm text-slate-400 mt-1">Review and approve user registrations</p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-4">
+                        <p class="text-xs text-slate-500 mb-1">Total Users</p>
+                        <p class="text-2xl font-bold text-slate-100" id="total-users">0</p>
+                    </div>
+                    <div class="bg-slate-950 border border-amber-500/20 rounded-lg p-4">
+                        <p class="text-xs text-amber-500 mb-1">Pending</p>
+                        <p class="text-2xl font-bold text-amber-500" id="stat-pending">0</p>
+                    </div>
+                    <div class="bg-slate-950 border border-emerald-500/20 rounded-lg p-4">
+                        <p class="text-xs text-emerald-500 mb-1">Approved</p>
+                        <p class="text-2xl font-bold text-emerald-500" id="stat-approved">0</p>
+                    </div>
+                    <div class="bg-slate-950 border border-rose-500/20 rounded-lg p-4">
+                        <p class="text-xs text-rose-500 mb-1">Rejected</p>
+                        <p class="text-2xl font-bold text-rose-500" id="stat-rejected">0</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="p-8">
+                <!-- Search and Filters -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Search Users</label>
+                            <input 
+                                type="text" 
+                                id="search-input"
+                                placeholder="Search by name, email, phone..." 
+                                class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                                onkeyup="filterUsers()"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Status</label>
+                            <select 
+                                id="filter-select"
+                                class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors"
+                                onchange="filterUsers()"
+                            >
+                                <option value="all">All Users</option>
+                                <option value="pending">Pending Only</option>
+                                <option value="approved">Approved Only</option>
+                                <option value="rejected">Rejected Only</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="refreshData()" class="w-full px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex space-x-4 mb-6">
+                    <button onclick="switchTab('all')" class="px-6 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium transition-colors tab-btn active-tab">
+                        All Users
+                    </button>
+                    <button onclick="switchTab('pending')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                        Pending
+                    </button>
+                    <button onclick="switchTab('approved')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                        Approved
+                    </button>
+                    <button onclick="switchTab('rejected')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                        Rejected
+                    </button>
+                </div>
+
+                <!-- Users List -->
+                <div id="users-list" class="space-y-4">
+                    <!-- Users will be rendered here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- User Details Modal -->
+        <div id="modal-overlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+                <div class="sticky top-0 bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-slate-100">User Details</h2>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="modal-content" class="p-6">
+                    <!-- Content will be populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure
+        let users = JSON.parse(localStorage.getItem('adminUsers') || '[]');
+        let currentTab = 'all';
+        let filteredUsers = [];
+
+        // Initialize with sample pending users if empty
+        if (users.length === 0) {
+            users = [
+                {
+                    id: 1,
+                    name: 'John Doe',
+                    email: 'john.doe@example.com',
+                    phone: '+91 98765 43210',
+                    registeredOn: new Date().toISOString(),
+                    status: 'pending',
+                    pan: 'ABCDE1234F',
+                    aadhaar: '**** **** 5678'
+                },
+                {
+                    id: 2,
+                    name: 'Jane Smith',
+                    email: 'jane.smith@example.com',
+                    phone: '+91 87654 32109',
+                    registeredOn: new Date(Date.now() - 86400000).toISOString(),
+                    status: 'pending',
+                    pan: 'FGHIJ5678K',
+                    aadhaar: '**** **** 9012'
+                },
+                {
+                    id: 3,
+                    name: 'Robert Johnson',
+                    email: 'robert.j@example.com',
+                    phone: '+91 76543 21098',
+                    registeredOn: new Date(Date.now() - 172800000).toISOString(),
+                    status: 'pending',
+                    pan: 'KLMNO9012P',
+                    aadhaar: '**** **** 3456'
+                }
+            ];
+            saveUsers();
+        }
+
+        function saveUsers() {
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+            updateUI();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab', 'bg-emerald-500/10', 'text-emerald-500', 'border-emerald-500/20');
+                btn.classList.add('text-slate-400', 'hover:text-slate-100', 'hover:bg-slate-800', 'border-slate-800');
+            });
+            event.target.classList.add('active-tab', 'bg-emerald-500/10', 'text-emerald-500', 'border-emerald-500/20');
+            event.target.classList.remove('text-slate-400', 'hover:text-slate-100', 'hover:bg-slate-800', 'border-slate-800');
+            filterUsers();
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filterStatus = document.getElementById('filter-select').value;
+
+            filteredUsers = users.filter(user => {
+                const matchesSearch = !searchTerm || 
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm) ||
+                    user.phone.includes(searchTerm);
+
+                const matchesStatus = filterStatus === 'all' || user.status === filterStatus;
+
+                return matchesSearch && matchesStatus;
+            });
+
+            if (currentTab === 'pending') {
+                filteredUsers = filteredUsers.filter(u => u.status === 'pending');
+            } else if (currentTab === 'approved') {
+                filteredUsers = filteredUsers.filter(u => u.status === 'approved');
+            } else if (currentTab === 'rejected') {
+                filteredUsers = filteredUsers.filter(u => u.status === 'rejected');
+            }
+
+            renderUsersList();
+        }
+
+        function approveUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user && confirm(`Approve account for ${user.name}?`)) {
+                user.status = 'approved';
+                user.approvedOn = new Date().toISOString();
+                saveUsers();
+                showNotification(`${user.name}'s account has been approved`, 'success');
+            }
+        }
+
+        function rejectUser(userId) {
+            const user = users.find(u => u.id === userId);
+            const reason = prompt(`Reject account for ${user.name}?\n\nPlease provide a reason:`);
+            if (reason) {
+                user.status = 'rejected';
+                user.rejectedOn = new Date().toISOString();
+                user.rejectionReason = reason;
+                saveUsers();
+                showNotification(`${user.name}'s account has been rejected`, 'error');
+            }
+        }
+
+        function openUserModal(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const modal = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            const regDate = new Date(user.registeredOn);
+            
+            let statusHtml = '';
+            if (user.status === 'approved') {
+                const appDate = new Date(user.approvedOn);
+                statusHtml = `
+                    <div class="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                        <p class="text-xs text-emerald-500 mb-1">Status</p>
+                        <p class="text-sm font-medium text-emerald-400">✓ Approved on ${appDate.toLocaleDateString('en-IN')}</p>
+                    </div>
+                `;
+            } else if (user.status === 'rejected') {
+                const rejDate = new Date(user.rejectedOn);
+                statusHtml = `
+                    <div class="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg">
+                        <p class="text-xs text-rose-500 mb-1">Status</p>
+                        <p class="text-sm font-medium text-rose-400">✗ Rejected on ${rejDate.toLocaleDateString('en-IN')}</p>
+                        <p class="text-xs text-slate-400 mt-2">Reason: ${user.rejectionReason || 'Not provided'}</p>
+                    </div>
+                `;
+            } else {
+                statusHtml = `
+                    <div class="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                        <p class="text-xs text-amber-500 mb-1">Status</p>
+                        <p class="text-sm font-medium text-amber-400">⏱ Pending Review</p>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-2xl font-bold text-white">${user.name.charAt(0)}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-100">${user.name}</h3>
+                            <p class="text-sm text-slate-400">${user.email}</p>
+                        </div>
+                    </div>
+
+                    ${statusHtml}
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-3 bg-slate-950 rounded-lg">
+                            <p class="text-xs text-slate-500 mb-2">Phone</p>
+                            <p class="text-sm font-medium text-slate-300">${user.phone}</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg">
+                            <p class="text-xs text-slate-500 mb-2">Registered</p>
+                            <p class="text-sm font-medium text-slate-300">${regDate.toLocaleDateString('en-IN')}</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg">
+                            <p class="text-xs text-slate-500 mb-2">PAN Number</p>
+                            <p class="text-sm font-medium text-slate-300 font-mono">${user.pan}</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg">
+                            <p class="text-xs text-slate-500 mb-2">Aadhaar</p>
+                            <p class="text-sm font-medium text-slate-300 font-mono">${user.aadhaar}</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800">
+                        ${user.status === 'pending' ? `
+                            <div class="flex space-x-3">
+                                <button onclick="approveUser(${user.id}); closeModal();" class="flex-1 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors">
+                                    Approve Account
+                                </button>
+                                <button onclick="rejectUser(${user.id}); closeModal();" class="flex-1 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition-colors">
+                                    Reject Account
+                                </button>
+                            </div>
+                        ` : `
+                            <p class="text-sm text-slate-400 text-center py-2">Account has been ${user.status}</p>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+
+        function renderUsersList() {
+            const usersList = document.getElementById('users-list');
+
+            if (filteredUsers.length === 0) {
+                usersList.innerHTML = `
+                    <div class="text-center py-16">
+                        <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-slate-100 mb-2">No Users Found</h3>
+                        <p class="text-slate-400">Try adjusting your search or filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            usersList.innerHTML = filteredUsers.map(user => {
+                const regDate = new Date(user.registeredOn);
+                const days = Math.floor((Date.now() - new Date(user.registeredOn)) / 86400000);
+
+                let statusColor = 'amber';
+                let statusText = 'Pending';
+                let statusIcon = '⏱';
+
+                if (user.status === 'approved') {
+                    statusColor = 'emerald';
+                    statusText = 'Approved';
+                    statusIcon = '✓';
+                } else if (user.status === 'rejected') {
+                    statusColor = 'rose';
+                    statusText = 'Rejected';
+                    statusIcon = '✗';
+                }
+
+                return `
+                    <div onclick="openUserModal(${user.id})" class="cursor-pointer bg-slate-900 border border-slate-800 hover:border-${statusColor}-500/30 rounded-xl p-6 transition-all hover:shadow-lg hover:shadow-${statusColor}-500/10">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-4 flex-1">
+                                <div class="w-12 h-12 bg-${statusColor}-500/10 border border-${statusColor}-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-lg font-bold text-${statusColor}-500">${user.name.charAt(0)}</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-slate-100">${user.name}</h3>
+                                    <p class="text-sm text-slate-400">${user.email}</p>
+                                    <p class="text-xs text-slate-500 mt-2">
+                                        Registered ${days} day${days !== 1 ? 's' : ''} ago
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-${statusColor}-500/10 text-${statusColor}-500 border border-${statusColor}-500/20 whitespace-nowrap">
+                                ${statusIcon} ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStatistics() {
+            const total = users.length;
+            const pending = users.filter(u => u.status === 'pending').length;
+            const approved = users.filter(u => u.status === 'approved').length;
+            const rejected = users.filter(u => u.status === 'rejected').length;
+
+            document.getElementById('total-users').textContent = total;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-approved').textContent = approved;
+            document.getElementById('stat-rejected').textContent = rejected;
+        }
+
+        function updateUI() {
+            updateStatistics();
+            filterUsers();
+        }
+
+        function refreshData() {
+            showNotification('Data refreshed', 'success');
+            updateUI();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'} text-white font-medium`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal-overlay')) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>
