@@ -790,11 +790,8 @@
             });
         }
 
-        // Search functionality - reset to page 1 when searching
-        document.getElementById('search-input').addEventListener('input', function() {
-            currentPage = 1;
-            renderStocks();
-        });
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', renderStocks);
 
         // Initial load - fetch stocks from JSON file
         loadStocksFromJSON();
