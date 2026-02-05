@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market - Paper Market</title>
+    <script src="tailwindcss.js"></script>
+</head>
+<body class="bg-slate-950 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 border-b border-slate-800">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold text-slate-100">Paper Market</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="holdings.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    <span>Holdings</span>
+                </a>
+
+                <a href="market.html" class="flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    <span>Market</span>
+                </a>
+
+                <a href="funds.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span>Funds</span>
+                </a>
+
+                <a href="orders.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <span>Orders</span>
+                </a>
+            </nav>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <span>Trade History</span>
+                </a>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="p-4 border-t border-slate-800">
+                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800 rounded-lg cursor-pointer transition-colors">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-slate-300">JD</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-slate-100">John Doe</p>
+                        <p class="text-xs text-slate-500">john@example.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Header -->
+            <header class="bg-slate-900 border-b border-slate-800 px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-100">Market</h1>
+                        <p class="text-sm text-slate-400 mt-1">Browse and trade stocks</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Search Bar with Autocomplete -->
+                        <div class="relative w-96">
+                            <input 
+                                id="search-input"
+                                type="text" 
+                                placeholder="Search stocks by name or symbol..." 
+                                class="w-full px-4 py-2 pl-10 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                                autocomplete="off"
+                            >
+                            <svg class="w-5 h-5 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            
+                            <!-- Autocomplete Dropdown -->
+                            <div 
+                                id="search-results"
+                                class="absolute top-full left-0 right-0 bg-slate-800 border border-slate-700 rounded-lg mt-1 max-h-96 overflow-y-auto z-50 hidden shadow-lg"
+                            >
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Market Status -->
+                        <div class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <span class="text-sm font-medium text-emerald-500">Market Open</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Market Content -->
+            <div class="p-8">                <!-- Market Overview -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-slate-100">Market Overview</h2>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-slate-500">Live</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div id="nifty-data">
+                            <p class="text-sm text-slate-400 mb-1">NIFTY 50</p>
+                            <p class="text-xl font-bold text-slate-100">--</p>
+                            <p class="text-sm text-slate-500">Loading...</p>
+                        </div>
+                        <div id="sensex-data">
+                            <p class="text-sm text-slate-400 mb-1">SENSEX</p>
+                            <p class="text-xl font-bold text-slate-100">--</p>
+                            <p class="text-sm text-slate-500">Loading...</p>
+                        </div>
+                        <div id="banknifty-data">
+                            <p class="text-sm text-slate-400 mb-1">BANK NIFTY</p>
+                            <p class="text-xl font-bold text-slate-100">--</p>
+                            <p class="text-sm text-slate-500">Loading...</p>
+                        </div>
+                        <div id="niftyit-data">
+                            <p class="text-sm text-slate-400 mb-1">NIFTY IT</p>
+                            <p class="text-xl font-bold text-slate-100">--</p>
+                            <p class="text-sm text-slate-500">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Market Index Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- NIFTY 50 Chart -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-slate-100 mb-4">NIFTY 50</h3>
+                        <div style="position: relative; width: 100%; height: 250px;">
+                            <canvas id="nifty-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- SENSEX Chart -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-slate-100 mb-4">SENSEX</h3>
+                        <div style="position: relative; width: 100%; height: 250px;">
+                            <canvas id="sensex-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <button id="btn-all" class="px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium text-sm">
+                            All Stocks
+                        </button>
+                        <button id="btn-watchlist" class="px-4 py-2 text-slate-400 hover:bg-slate-800 border border-slate-800 rounded-lg text-sm transition-colors">
+                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                            </svg>
+                            Watchlist
+                        </button>
+                        <button id="btn-gainers" class="px-4 py-2 text-slate-400 hover:bg-slate-800 border border-slate-800 rounded-lg text-sm transition-colors">
+                            Top Gainers
+                        </button>
+                        <button id="btn-losers" class="px-4 py-2 text-slate-400 hover:bg-slate-800 border border-slate-800 rounded-lg text-sm transition-colors">
+                            Top Losers
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stocks Table -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-slate-800">
+                                <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Symbol</th>
+                                <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Company</th>
+                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">LTP</th>
+                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Change</th>
+                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">% Change</th>
+                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Volume</th>
+                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stocks-tbody" class="divide-y divide-slate-800">
+                            <!-- Stock rows will be dynamically generated here -->
+                        </tbody>
+                    </table>
+                    <div id="pagination-container"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chart.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Fetch live market data from Yahoo Finance with CORS proxy
+        async function fetchMarketData(symbol, elementId, displayName) {
+            try {
+                const corsProxy = 'https://corsproxy.io/?';
+                const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+                const response = await fetch(corsProxy + apiUrl);
+                const data = await response.json();
+                
+                if (data.chart && data.chart.result && data.chart.result[0]) {
+                    const result = data.chart.result[0];
+                    const meta = result.meta;
+                    
+                    const currentPrice = meta.regularMarketPrice || meta.previousClose;
+                    const previousClose = meta.chartPreviousClose || meta.previousClose;
+                    const change = currentPrice - previousClose;
+                    const changePercent = (change / previousClose) * 100;
+                    
+                    const element = document.getElementById(elementId);
+                    const isPositive = change >= 0;
+                    const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
+                    const sign = isPositive ? '+' : '';
+                    
+                    element.innerHTML = `
+                        <p class="text-sm text-slate-400 mb-1">${displayName}</p>
+                        <p class="text-xl font-bold text-slate-100">${currentPrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                        <p class="text-sm ${colorClass}">${sign}${change.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)</p>
+                    `;
+                }
+            } catch (error) {
+                console.error(`Error fetching ${symbol}:`, error);
+                document.getElementById(elementId).innerHTML = `
+                    <p class="text-sm text-slate-400 mb-1">${displayName}</p>
+                    <p class="text-xl font-bold text-slate-100">--</p>
+                    <p class="text-sm text-slate-500">Error loading</p>
+                `;
+            }
+        }
+
+        // Load market data
+        function loadMarketData() {
+            fetchMarketData('^NSEI', 'nifty-data', 'NIFTY 50');
+            fetchMarketData('^BSESN', 'sensex-data', 'SENSEX');
+            fetchMarketData('^NSEBANK', 'banknifty-data', 'BANK NIFTY');
+            fetchMarketData('^CNXIT', 'niftyit-data', 'NIFTY IT');
+        }
+
+        // Load market data on page load
+        loadMarketData();
+        
+        // Auto-refresh market data every 60 seconds
+        setInterval(loadMarketData, 60000);
+
+        // Search stocks - now uses pre-loaded Indian stocks list
+        // Search stocks from Yahoo Finance API - searches entire Indian market
+        async function searchStocksFromAPI(query) {
+            if (query.length < 1) {
+                document.getElementById('search-results').classList.add('hidden');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('search-results');
+            resultsDiv.innerHTML = '<div class="p-4 text-slate-400 text-center">Searching...</div>';
+            resultsDiv.classList.remove('hidden');
+            
+            try {
+                // Using Yahoo Finance suggest endpoint with CORS proxy
+                const corsProxy = 'https://corsproxy.io/?';
+                const apiUrl = `https://query1.finance.yahoo.com/v10/finance/search/suggest?q=${encodeURIComponent(query)}&region=IN&lang=en`;
+                
+                const response = await fetch(corsProxy + encodeURIComponent(apiUrl));
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const quotes = data.quotes || [];
+                
+                // Filter for Indian equity stocks
+                const indianStocks = quotes.filter(q => 
+                    q.symbol && 
+                    q.quoteType === 'EQUITY' &&
+                    (q.symbol.endsWith('.NS') || q.symbol.endsWith('.BO'))
+                ).slice(0, 15);
+                
+                if (indianStocks.length === 0) {
+                    resultsDiv.innerHTML = '<div class="p-4 text-slate-400 text-center">No Indian stocks found</div>';
+                    return;
+                }
+
+                resultsDiv.innerHTML = indianStocks.map(stock => {
+                    const displaySymbol = (stock.symbol || '').replace('.NS', '').replace('.BO', '');
+                    const displayName = stock.longname || stock.shortname || stock.symbol || '';
+                    const safeDisplayName = displayName.replace(/'/g, "\\\\'").replace(/"/g, '&quot;');
+                    const exchange = stock.exchDisp || (stock.symbol.endsWith('.NS') ? 'NSE' : 'BSE');
+                    
+                    return `
+                        <div 
+                            class="px-4 py-3 hover:bg-slate-700 cursor-pointer border-b border-slate-700 last:border-b-0 transition-colors"
+                            onclick="selectStock('${stock.symbol}', '${safeDisplayName}')">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-100 truncate">${displaySymbol}</p>
+                                    <p class="text-sm text-slate-400 truncate">${displayName}</p>
+                                </div>
+                                <span class="text-xs text-slate-500 ml-2 flex-shrink-0">${exchange}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error searching stocks:', error);
+                resultsDiv.innerHTML = `
+                    <div class="p-4 text-center">
+                        <p class="text-slate-400 mb-2">Unable to search stocks</p>
+                        <p class="text-xs text-slate-500">Check connection or try again</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Select stock from dropdown
+        async function selectStock(symbol, name) {
+            const searchInput = document.getElementById('search-input');
+            searchInput.value = '';
+            document.getElementById('search-results').classList.add('hidden');
+
+            // Check if stock already exists
+            if (allStocks.find(s => s.symbol === symbol.replace('.NS', '').replace('.BO', ''))) {
+                alert('Stock already exists in the list');
+                return;
+            }
+
+            // Add .NS if not present
+            let fullSymbol = symbol;
+            if (!fullSymbol.includes('.NS') && !fullSymbol.includes('.BO')) {
+                fullSymbol = fullSymbol + '.NS';
+            }
+
+            // Show loading message
+            const tbody = document.getElementById('stocks-tbody');
+            const tempRow = document.createElement('tr');
+            tempRow.innerHTML = '<td colspan="7" class="px-6 py-4 text-center text-slate-400">Loading stock data...</td>';
+            tbody.prepend(tempRow);
+            
+            // Fetch stock data
+            const stockData = await fetchStockData(fullSymbol);
+            
+            // Remove loading message
+            tempRow.remove();
+            
+            if (stockData) {
+                customStocks.push(stockData);
+                localStorage.setItem('customStocks', JSON.stringify(customStocks));
+                allStocks = [...stocksData, ...customStocks];
+                renderStocks();
+            } else {
+                alert('Unable to fetch stock data for ' + symbol);
+            }
+        }
+
+        // Search input event listener with debounce for better performance
+        let searchTimeout;
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            
+            // Clear existing timeout
+            clearTimeout(searchTimeout);
+            
+            // If empty, just filter the table
+            if (!query) {
+                document.getElementById('search-results').classList.add('hidden');
+                renderStocks();
+                return;
+            }
+            
+            // For table filtering (local stocks)
+            renderStocks();
+            
+            // Debounce API search
+            searchTimeout = setTimeout(() => {
+                searchStocksFromAPI(query);
+            }, 300);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const searchContainer = document.querySelector('.relative.w-96');
+            if (searchContainer && !searchContainer.contains(e.target)) {
+                document.getElementById('search-results').classList.add('hidden');
+            }
+        });
+
+        // Comprehensive stock data - Entire Indian Market
+        const stocksData = [
+            // NIFTY 50 Companies
+            { symbol: 'RELIANCE', name: 'Reliance Industries', ltp: 2480.00, change: 30.00, changePercent: 1.22, volume: '5.1M', sector: 'Oil & Gas' },
+            { symbol: 'TCS', name: 'Tata Consultancy Services', ltp: 3660.00, change: 45.20, changePercent: 1.25, volume: '2.4M', sector: 'IT' },
+            { symbol: 'HDFCBANK', name: 'HDFC Bank', ltp: 1750.00, change: 70.00, changePercent: 4.17, volume: '3.8M', sector: 'Banking' },
+            { symbol: 'INFY', name: 'Infosys', ltp: 1620.00, change: -15.50, changePercent: -0.95, volume: '2.9M', sector: 'IT' },
+            { symbol: 'ICICIBANK', name: 'ICICI Bank', ltp: 960.00, change: 40.00, changePercent: 4.35, volume: '4.2M', sector: 'Banking' },
+            { symbol: 'HINDUNILVR', name: 'Hindustan Unilever', ltp: 2580.00, change: 35.20, changePercent: 1.38, volume: '1.4M', sector: 'FMCG' },
+            { symbol: 'ITC', name: 'ITC Limited', ltp: 420.00, change: 8.50, changePercent: 2.07, volume: '6.2M', sector: 'FMCG' },
+            { symbol: 'SBIN', name: 'State Bank of India', ltp: 620.00, change: 12.50, changePercent: 2.06, volume: '5.8M', sector: 'Banking' },
+            { symbol: 'BHARTIARTL', name: 'Bharti Airtel', ltp: 1120.00, change: 25.60, changePercent: 2.34, volume: '3.8M', sector: 'Telecom' },
+            { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank', ltp: 1780.00, change: 28.90, changePercent: 1.65, volume: '2.1M', sector: 'Banking' },
+            { symbol: 'LT', name: 'Larsen & Toubro', ltp: 3180.00, change: 58.40, changePercent: 1.87, volume: '1.7M', sector: 'Infrastructure' },
+            { symbol: 'AXISBANK', name: 'Axis Bank', ltp: 1050.00, change: -8.30, changePercent: -0.78, volume: '3.2M', sector: 'Banking' },
+            { symbol: 'ASIANPAINT', name: 'Asian Paints', ltp: 2890.00, change: -35.00, changePercent: -1.20, volume: '0.9M', sector: 'Paint' },
+            { symbol: 'MARUTI', name: 'Maruti Suzuki', ltp: 11580.00, change: 215.00, changePercent: 1.89, volume: '0.7M', sector: 'Auto' },
+            { symbol: 'SUNPHARMA', name: 'Sun Pharmaceutical', ltp: 1250.00, change: 18.60, changePercent: 1.51, volume: '2.3M', sector: 'Pharma' },
+            { symbol: 'BAJFINANCE', name: 'Bajaj Finance', ltp: 7250.00, change: 125.00, changePercent: 1.75, volume: '1.2M', sector: 'Finance' },
+            { symbol: 'TITAN', name: 'Titan Company', ltp: 3250.00, change: 42.80, changePercent: 1.33, volume: '1.5M', sector: 'Consumer' },
+            { symbol: 'WIPRO', name: 'Wipro', ltp: 430.00, change: -10.00, changePercent: -2.27, volume: '1.8M', sector: 'IT' },
+            { symbol: 'HCLTECH', name: 'HCL Technologies', ltp: 1420.00, change: 22.50, changePercent: 1.61, volume: '2.1M', sector: 'IT' },
+            { symbol: 'ULTRACEMCO', name: 'UltraTech Cement', ltp: 8650.00, change: -95.30, changePercent: -1.09, volume: '0.4M', sector: 'Cement' },
+            { symbol: 'TATAMOTORS', name: 'Tata Motors', ltp: 720.00, change: 15.80, changePercent: 2.24, volume: '3.5M', sector: 'Auto' },
+            { symbol: 'ONGC', name: 'Oil & Natural Gas Corp', ltp: 185.50, change: 4.20, changePercent: 2.32, volume: '4.5M', sector: 'Oil & Gas' },
+            { symbol: 'NTPC', name: 'NTPC Limited', ltp: 285.00, change: -3.20, changePercent: -1.11, volume: '3.2M', sector: 'Power' },
+            { symbol: 'TATASTEEL', name: 'Tata Steel', ltp: 145.50, change: 3.80, changePercent: 2.68, volume: '5.5M', sector: 'Metals' },
+            { symbol: 'POWERGRID', name: 'Power Grid Corp', ltp: 245.00, change: 4.80, changePercent: 2.00, volume: '2.5M', sector: 'Power' },
+            { symbol: 'NESTLEIND', name: 'Nestle India', ltp: 23500.00, change: -180.00, changePercent: -0.76, volume: '0.3M', sector: 'FMCG' },
+            { symbol: 'HDFCLIFE', name: 'HDFC Life Insurance', ltp: 680.00, change: 12.40, changePercent: 1.86, volume: '1.6M', sector: 'Insurance' },
+            { symbol: 'M&M', name: 'Mahindra & Mahindra', ltp: 1820.00, change: -12.40, changePercent: -0.68, volume: '1.6M', sector: 'Auto' },
+            { symbol: 'TECHM', name: 'Tech Mahindra', ltp: 1180.00, change: 18.40, changePercent: 1.58, volume: '1.5M', sector: 'IT' },
+            { symbol: 'BAJAJFINSV', name: 'Bajaj Finserv', ltp: 1580.00, change: 32.40, changePercent: 2.09, volume: '0.9M', sector: 'Finance' },
+            { symbol: 'COALINDIA', name: 'Coal India', ltp: 380.00, change: 6.20, changePercent: 1.66, volume: '3.8M', sector: 'Mining' },
+            { symbol: 'ADANIPORTS', name: 'Adani Ports', ltp: 820.00, change: 18.50, changePercent: 2.31, volume: '2.2M', sector: 'Infrastructure' },
+            { symbol: 'JSWSTEEL', name: 'JSW Steel', ltp: 780.00, change: -8.90, changePercent: -1.13, volume: '2.9M', sector: 'Metals' },
+            { symbol: 'INDUSINDBK', name: 'IndusInd Bank', ltp: 1450.00, change: 22.30, changePercent: 1.56, volume: '1.8M', sector: 'Banking' },
+            { symbol: 'ADANIENT', name: 'Adani Enterprises', ltp: 2850.00, change: -45.60, changePercent: -1.57, volume: '1.9M', sector: 'Conglomerate' },
+            { symbol: 'DIVISLAB', name: 'Divi\'s Laboratories', ltp: 3680.00, change: 52.30, changePercent: 1.44, volume: '0.6M', sector: 'Pharma' },
+            { symbol: 'GRASIM', name: 'Grasim Industries', ltp: 1920.00, change: 28.70, changePercent: 1.52, volume: '1.1M', sector: 'Cement' },
+            { symbol: 'EICHERMOT', name: 'Eicher Motors', ltp: 3890.00, change: 65.20, changePercent: 1.70, volume: '0.5M', sector: 'Auto' },
+            { symbol: 'TATACONSUM', name: 'Tata Consumer Products', ltp: 920.00, change: 14.80, changePercent: 1.63, volume: '1.3M', sector: 'FMCG' },
+            { symbol: 'CIPLA', name: 'Cipla', ltp: 1180.00, change: 22.40, changePercent: 1.94, volume: '1.8M', sector: 'Pharma' },
+            { symbol: 'BRITANNIA', name: 'Britannia Industries', ltp: 4850.00, change: 62.30, changePercent: 1.30, volume: '0.6M', sector: 'FMCG' },
+            { symbol: 'DRREDDY', name: 'Dr Reddy\'s Laboratories', ltp: 5890.00, change: -42.30, changePercent: -0.71, volume: '0.5M', sector: 'Pharma' },
+            { symbol: 'APOLLOHOSP', name: 'Apollo Hospitals', ltp: 5420.00, change: 78.90, changePercent: 1.48, volume: '0.4M', sector: 'Healthcare' },
+            { symbol: 'SBILIFE', name: 'SBI Life Insurance', ltp: 1450.00, change: 26.50, changePercent: 1.86, volume: '1.2M', sector: 'Insurance' },
+            { symbol: 'HINDALCO', name: 'Hindalco Industries', ltp: 520.00, change: -8.20, changePercent: -1.55, volume: '3.1M', sector: 'Metals' },
+            { symbol: 'BPCL', name: 'Bharat Petroleum', ltp: 380.00, change: -6.50, changePercent: -1.68, volume: '2.8M', sector: 'Oil & Gas' },
+            { symbol: 'HEROMOTOCO', name: 'Hero MotoCorp', ltp: 3180.00, change: 48.60, changePercent: 1.55, volume: '0.8M', sector: 'Auto' },
+            { symbol: 'SHREECEM', name: 'Shree Cement', ltp: 26500.00, change: -320.00, changePercent: -1.19, volume: '0.2M', sector: 'Cement' },
+            { symbol: 'BAJAJ-AUTO', name: 'Bajaj Auto', ltp: 5680.00, change: 78.50, changePercent: 1.40, volume: '0.8M', sector: 'Auto' },
+            { symbol: 'VEDL', name: 'Vedanta Limited', ltp: 280.00, change: 6.40, changePercent: 2.34, volume: '4.0M', sector: 'Metals' },
+            
+            // Other Major Stocks
+            { symbol: 'TATAPOWER', name: 'Tata Power', ltp: 245.00, change: 5.60, changePercent: 2.34, volume: '4.5M', sector: 'Power' },
+            { symbol: 'IRCTC', name: 'IRCTC', ltp: 780.00, change: 18.20, changePercent: 2.39, volume: '2.1M', sector: 'Travel' },
+            { symbol: 'ZOMATO', name: 'Zomato', ltp: 125.00, change: -2.50, changePercent: -1.96, volume: '8.5M', sector: 'Tech' },
+            { symbol: 'PAYTM', name: 'Paytm', ltp: 520.00, change: 12.30, changePercent: 2.42, volume: '5.2M', sector: 'Fintech' },
+            { symbol: 'NYKAA', name: 'Nykaa', ltp: 168.00, change: -3.80, changePercent: -2.21, volume: '3.8M', sector: 'E-commerce' },
+            { symbol: 'POLICYBZR', name: 'Policybazaar', ltp: 890.00, change: 22.40, changePercent: 2.58, volume: '1.5M', sector: 'Insurtech' },
+            { symbol: 'ADANIGREEN', name: 'Adani Green Energy', ltp: 1420.00, change: -28.50, changePercent: -1.97, volume: '2.8M', sector: 'Renewables' },
+            { symbol: 'DLF', name: 'DLF Limited', ltp: 580.00, change: 12.80, changePercent: 2.26, volume: '3.2M', sector: 'Real Estate' },
+            { symbol: 'GODREJPROP', name: 'Godrej Properties', ltp: 1850.00, change: 32.40, changePercent: 1.78, volume: '1.4M', sector: 'Real Estate' },
+            { symbol: 'PRESTIGE', name: 'Prestige Estates', ltp: 980.00, change: 18.60, changePercent: 1.94, volume: '1.1M', sector: 'Real Estate' },
+            { symbol: 'IRFC', name: 'Indian Railway Finance', ltp: 68.00, change: 1.80, changePercent: 2.72, volume: '12.5M', sector: 'Finance' },
+            { symbol: 'RVNL', name: 'Rail Vikas Nigam', ltp: 185.00, change: 4.20, changePercent: 2.32, volume: '6.8M', sector: 'Infrastructure' },
+            { symbol: 'BEL', name: 'Bharat Electronics', ltp: 245.00, change: 6.80, changePercent: 2.85, volume: '5.2M', sector: 'Defence' },
+            { symbol: 'HAL', name: 'Hindustan Aeronautics', ltp: 3850.00, change: 82.40, changePercent: 2.19, volume: '1.2M', sector: 'Defence' },
+            { symbol: 'ZYDUSLIFE', name: 'Zydus Lifesciences', ltp: 680.00, change: 12.30, changePercent: 1.84, volume: '1.8M', sector: 'Pharma' },
+            { symbol: 'LUPIN', name: 'Lupin', ltp: 1420.00, change: -15.60, changePercent: -1.09, volume: '1.5M', sector: 'Pharma' },
+            { symbol: 'BIOCON', name: 'Biocon', ltp: 285.00, change: 5.40, changePercent: 1.93, volume: '2.8M', sector: 'Pharma' },
+            { symbol: 'TORNTPHARM', name: 'Torrent Pharmaceuticals', ltp: 2180.00, change: 38.50, changePercent: 1.80, volume: '0.6M', sector: 'Pharma' },
+            { symbol: 'DABUR', name: 'Dabur India', ltp: 520.00, change: 8.60, changePercent: 1.68, volume: '2.1M', sector: 'FMCG' },
+            { symbol: 'GODREJCP', name: 'Godrej Consumer', ltp: 980.00, change: 14.20, changePercent: 1.47, volume: '1.3M', sector: 'FMCG' },
+            { symbol: 'MARICO', name: 'Marico', ltp: 580.00, change: 9.80, changePercent: 1.72, volume: '1.9M', sector: 'FMCG' },
+            { symbol: 'COLGATE', name: 'Colgate-Palmolive', ltp: 2680.00, change: 42.30, changePercent: 1.60, volume: '0.5M', sector: 'FMCG' },
+            { symbol: 'PIDILITIND', name: 'Pidilite Industries', ltp: 2850.00, change: -32.40, changePercent: -1.12, volume: '0.7M', sector: 'Chemicals' },
+            { symbol: 'BERGEPAINT', name: 'Berger Paints', ltp: 580.00, change: 12.30, changePercent: 2.17, volume: '1.2M', sector: 'Paint' },
+            { symbol: 'SIEMENS', name: 'Siemens', ltp: 4250.00, change: 68.50, changePercent: 1.64, volume: '0.5M', sector: 'Industrial' },
+            { symbol: 'ABB', name: 'ABB India', ltp: 5280.00, change: 92.30, changePercent: 1.78, volume: '0.4M', sector: 'Industrial' },
+            { symbol: 'BOSCHLTD', name: 'Bosch', ltp: 18500.00, change: -240.00, changePercent: -1.28, volume: '0.1M', sector: 'Auto Parts' },
+            { symbol: 'HAVELLS', name: 'Havells India', ltp: 1420.00, change: 24.60, changePercent: 1.76, volume: '1.1M', sector: 'Electricals' },
+            { symbol: 'VOLTAS', name: 'Voltas', ltp: 980.00, change: 16.80, changePercent: 1.74, volume: '1.4M', sector: 'Consumer Durables' },
+            { symbol: 'WHIRLPOOL', name: 'Whirlpool India', ltp: 1680.00, change: -22.40, changePercent: -1.32, volume: '0.6M', sector: 'Consumer Durables' },
+            { symbol: 'DIXON', name: 'Dixon Technologies', ltp: 5850.00, change: 128.40, changePercent: 2.24, volume: '0.5M', sector: 'Electronics' },
+            { symbol: 'TRENT', name: 'Trent Limited', ltp: 2420.00, change: 48.60, changePercent: 2.05, volume: '1.2M', sector: 'Retail' },
+            { symbol: 'DMART', name: 'Avenue Supermarts (DMart)', ltp: 3850.00, change: -52.30, changePercent: -1.34, volume: '0.6M', sector: 'Retail' },
+            { symbol: 'JUBLFOOD', name: 'Jubilant FoodWorks', ltp: 520.00, change: 12.40, changePercent: 2.44, volume: '1.8M', sector: 'QSR' },
+            { symbol: 'MCDOWELL-N', name: 'United Spirits', ltp: 980.00, change: 18.20, changePercent: 1.89, volume: '1.3M', sector: 'Beverages' },
+            { symbol: 'UBL', name: 'United Breweries', ltp: 1680.00, change: 28.50, changePercent: 1.73, volume: '0.7M', sector: 'Beverages' },
+            { symbol: 'MUTHOOTFIN', name: 'Muthoot Finance', ltp: 1380.00, change: 24.80, changePercent: 1.83, volume: '1.1M', sector: 'Finance' },
+            { symbol: 'CHOLAFIN', name: 'Cholamandalam Finance', ltp: 1120.00, change: 18.60, changePercent: 1.69, volume: '1.5M', sector: 'Finance' },
+            { symbol: 'PFC', name: 'Power Finance Corp', ltp: 285.00, change: 6.20, changePercent: 2.22, volume: '3.8M', sector: 'Finance' },
+            { symbol: 'RECLTD', name: 'REC Limited', ltp: 320.00, change: 7.40, changePercent: 2.37, volume: '4.2M', sector: 'Finance' },
+            { symbol: 'LICHSGFIN', name: 'LIC Housing Finance', ltp: 485.00, change: 9.80, changePercent: 2.06, volume: '2.4M', sector: 'Finance' },
+            { symbol: 'FEDERALBNK', name: 'Federal Bank', ltp: 145.00, change: 3.20, changePercent: 2.26, volume: '6.5M', sector: 'Banking' },
+            { symbol: 'BANDHANBNK', name: 'Bandhan Bank', ltp: 220.00, change: -4.50, changePercent: -2.00, volume: '4.8M', sector: 'Banking' },
+            { symbol: 'IDFCFIRSTB', name: 'IDFC First Bank', ltp: 82.00, change: 1.80, changePercent: 2.24, volume: '8.2M', sector: 'Banking' },
+            { symbol: 'PNB', name: 'Punjab National Bank', ltp: 95.00, change: 2.10, changePercent: 2.26, volume: '12.5M', sector: 'Banking' },
+            { symbol: 'BANKBARODA', name: 'Bank of Baroda', ltp: 225.00, change: 4.80, changePercent: 2.18, volume: '8.8M', sector: 'Banking' },
+            { symbol: 'CANBK', name: 'Canara Bank', ltp: 385.00, change: 8.20, changePercent: 2.18, volume: '6.2M', sector: 'Banking' },
+            { symbol: 'UNIONBANK', name: 'Union Bank of India', ltp: 118.00, change: 2.60, changePercent: 2.25, volume: '10.5M', sector: 'Banking' },
+            { symbol: 'IOC', name: 'Indian Oil Corp', ltp: 125.00, change: 2.80, changePercent: 2.29, volume: '8.5M', sector: 'Oil & Gas' },
+            { symbol: 'GAIL', name: 'GAIL India', ltp: 168.00, change: 3.50, changePercent: 2.13, volume: '5.2M', sector: 'Oil & Gas' },
+            { symbol: 'OIL', name: 'Oil India', ltp: 285.00, change: 6.40, changePercent: 2.30, volume: '3.5M', sector: 'Oil & Gas' },
+            { symbol: 'INDHOTEL', name: 'Indian Hotels', ltp: 520.00, change: 12.80, changePercent: 2.52, volume: '2.8M', sector: 'Hotels' },
+            { symbol: 'LEMONTREE', name: 'Lemon Tree Hotels', ltp: 125.00, change: 2.80, changePercent: 2.29, volume: '4.2M', sector: 'Hotels' },
+            { symbol: 'MOTHERSON', name: 'Samvardhana Motherson', ltp: 95.00, change: 1.80, changePercent: 1.93, volume: '8.5M', sector: 'Auto Parts' },
+            { symbol: 'BALKRISIND', name: 'Balkrishna Industries', ltp: 2450.00, change: 42.30, changePercent: 1.76, volume: '0.4M', sector: 'Auto Parts' },
+            { symbol: 'MRF', name: 'MRF Limited', ltp: 108500.00, change: -1250.00, changePercent: -1.14, volume: '0.02M', sector: 'Auto Parts' },
+            { symbol: 'APOLLOTYRE', name: 'Apollo Tyres', ltp: 420.00, change: 8.60, changePercent: 2.09, volume: '3.2M', sector: 'Auto Parts' },
+            { symbol: 'CUMMINSIND', name: 'Cummins India', ltp: 2180.00, change: 38.50, changePercent: 1.80, volume: '0.6M', sector: 'Auto Parts' },
+            { symbol: 'ESCORTS', name: 'Escorts Kubota', ltp: 3280.00, change: 58.40, changePercent: 1.81, volume: '0.8M', sector: 'Auto' },
+            { symbol: 'ASHOKLEY', name: 'Ashok Leyland', ltp: 165.00, change: 3.50, changePercent: 2.17, volume: '7.5M', sector: 'Auto' },
+            { symbol: 'TVSMOTOR', name: 'TVS Motor', ltp: 2180.00, change: 42.30, changePercent: 1.98, volume: '1.2M', sector: 'Auto' },
+            { symbol: 'NMDC', name: 'NMDC Limited', ltp: 185.00, change: 4.20, changePercent: 2.32, volume: '6.5M', sector: 'Mining' },
+            { symbol: 'SAIL', name: 'SAIL', ltp: 118.00, change: 2.80, changePercent: 2.43, volume: '12.5M', sector: 'Metals' },
+            { symbol: 'JINDALSTEL', name: 'Jindal Steel & Power', ltp: 780.00, change: 16.50, changePercent: 2.16, volume: '3.8M', sector: 'Metals' },
+            { symbol: 'NATIONALUM', name: 'National Aluminium', ltp: 105.00, change: 2.30, changePercent: 2.24, volume: '8.2M', sector: 'Metals' },
+            { symbol: 'AMBUJACEM', name: 'Ambuja Cements', ltp: 485.00, change: 9.80, changePercent: 2.06, volume: '3.5M', sector: 'Cement' },
+            { symbol: 'ACC', name: 'ACC Limited', ltp: 2180.00, change: -28.50, changePercent: -1.29, volume: '0.8M', sector: 'Cement' },
+            { symbol: 'DALBHARAT', name: 'Dalmia Bharat', ltp: 1980.00, change: 32.40, changePercent: 1.66, volume: '0.6M', sector: 'Cement' },
+            { symbol: 'GMRINFRA', name: 'GMR Infrastructure', ltp: 68.00, change: 1.50, changePercent: 2.26, volume: '15.5M', sector: 'Infrastructure' },
+            { symbol: 'LTIM', name: 'LTIMindtree', ltp: 5420.00, change: -45.30, changePercent: -0.83, volume: '0.6M', sector: 'IT' },
+            { symbol: 'PERSISTENT', name: 'Persistent Systems', ltp: 5280.00, change: 92.40, changePercent: 1.78, volume: '0.4M', sector: 'IT' },
+            { symbol: 'COFORGE', name: 'Coforge', ltp: 4850.00, change: 78.50, changePercent: 1.65, volume: '0.3M', sector: 'IT' },
+            { symbol: 'MPHASIS', name: 'Mphasis', ltp: 2680.00, change: 42.30, changePercent: 1.60, volume: '0.5M', sector: 'IT' },
+            { symbol: 'INTELLECT', name: 'Intellect Design Arena', ltp: 820.00, change: 18.60, changePercent: 2.32, volume: '1.2M', sector: 'IT' },
+            { symbol: 'POLYCAB', name: 'Polycab India', ltp: 5280.00, change: 92.40, changePercent: 1.78, volume: '0.4M', sector: 'Cables' },
+            { symbol: 'KEI', name: 'KEI Industries', ltp: 3180.00, change: 58.40, changePercent: 1.87, volume: '0.5M', sector: 'Cables' },
+            { symbol: 'CROMPTON', name: 'Crompton Greaves', ltp: 385.00, change: 7.20, changePercent: 1.91, volume: '2.1M', sector: 'Electricals' },
+            { symbol: 'ADANIPOWER', name: 'Adani Power', ltp: 485.00, change: -12.30, changePercent: -2.47, volume: '5.8M', sector: 'Power' },
+            { symbol: 'TORNTPOWER', name: 'Torrent Power', ltp: 920.00, change: 18.40, changePercent: 2.04, volume: '1.5M', sector: 'Power' },
+            { symbol: 'JSPL', name: 'Jindal Steel', ltp: 820.00, change: 16.80, changePercent: 2.09, volume: '3.2M', sector: 'Metals' },
+            { symbol: 'CANBK', name: 'Canara Bank', ltp: 385.00, change: 8.20, changePercent: 2.18, volume: '6.2M', sector: 'Banking' }
+        ];
+
+        let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+        let currentFilter = 'all';
+        let allStocks = [];
+
+        // Load stocks from local JSON file
+        async function loadStocksFromJSON() {
+            try {
+                const response = await fetch('stocks.json');
+                if (!response.ok) throw new Error('Failed to load stocks.json');
+                const data = await response.json();
+                allStocks = data.map(stock => ({
+                    symbol: stock.symbol,
+                    name: stock.name,
+                    volume: stock.volume || 0,
+                    ltp: 0,
+                    change: 0,
+                    changePercent: 0
+                }));
+                console.log(`Loaded ${allStocks.length} stocks from JSON`);
+                renderStocks();
+                // Fetch live prices for visible stocks
+                fetchLivePrices();
+            } catch (error) {
+                console.error('Error loading stocks:', error);
+                // Fallback to hardcoded data
+                allStocks = [...stocksData];
+                renderStocks();
+            }
+        }
+
+        // Fetch live prices from Yahoo Finance for first batch
+        async function fetchLivePrices() {
+            const visibleStocks = allStocks.slice(0, 50);
+            const corsProxy = 'https://corsproxy.io/?';
+            
+            for (const stock of visibleStocks) {
+                try {
+                    const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${stock.symbol}.NS?interval=1d&range=1d`;
+                    const response = await fetch(corsProxy + apiUrl);
+                    const data = await response.json();
+                    
+                    if (data.chart?.result?.[0]) {
+                        const meta = data.chart.result[0].meta;
+                        const currentPrice = meta.regularMarketPrice || meta.previousClose;
+                        const previousClose = meta.chartPreviousClose || meta.previousClose;
+                        const change = currentPrice - previousClose;
+                        const changePercent = previousClose ? (change / previousClose) * 100 : 0;
+                        
+                        stock.ltp = currentPrice || 0;
+                        stock.change = change || 0;
+                        stock.changePercent = changePercent || 0;
+                    }
+                } catch (e) {
+                    // Keep default values
+                }
+            }
+            renderStocks();
+        }
+
+        // Toggle watchlist
+        function toggleWatchlist(symbol) {
+            const index = watchlist.indexOf(symbol);
+            if (index > -1) {
+                watchlist.splice(index, 1);
+            } else {
+                watchlist.push(symbol);
+            }
+            localStorage.setItem('watchlist', JSON.stringify(watchlist));
+            renderStocks();
+        }
+
+        // Pagination
+        const ITEMS_PER_PAGE = 10;
+        let currentPage = 1;
+
+        // Render stock rows
+        function renderStocks() {
+            let filteredStocks = [...allStocks];
+            
+            // Apply filters
+            if (currentFilter === 'watchlist') {
+                filteredStocks = filteredStocks.filter(stock => watchlist.includes(stock.symbol));
+            } else if (currentFilter === 'gainers') {
+                filteredStocks = filteredStocks.filter(stock => stock.change > 0).sort((a, b) => b.changePercent - a.changePercent);
+            } else if (currentFilter === 'losers') {
+                filteredStocks = filteredStocks.filter(stock => stock.change < 0).sort((a, b) => a.changePercent - b.changePercent);
+            }
+
+            // Search filter
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (searchTerm) {
+                filteredStocks = filteredStocks.filter(stock => 
+                    stock.symbol.toLowerCase().includes(searchTerm) || 
+                    stock.name.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('stocks-tbody');
+            
+            if (filteredStocks.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center">
+                            <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                            </svg>
+                            <h3 class="text-xl font-semibold text-slate-100 mb-2">No stocks found</h3>
+                            <p class="text-slate-400">Try adjusting your search or filter</p>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('pagination-container').innerHTML = '';
+                return;
+            }
+
+            // Pagination
+            const totalPages = Math.ceil(filteredStocks.length / ITEMS_PER_PAGE);
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredStocks.length);
+            const pageStocks = filteredStocks.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageStocks.map(stock => {
+                const isPositive = stock.change >= 0;
+                const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
+                const sign = isPositive ? '+' : '';
+                const inWatchlist = watchlist.includes(stock.symbol);
+                const starFill = inWatchlist ? 'fill-yellow-500 text-yellow-500' : 'text-slate-500';
+
+                return `
+                    <tr class="hover:bg-slate-800/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-2">
+                                <button onclick="toggleWatchlist('${stock.symbol}')" class="hover:scale-110 transition-transform">
+                                    <svg class="w-5 h-5 ${starFill}" fill="${inWatchlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                    </svg>
+                                </button>
+                                <span class="font-semibold text-slate-100">${stock.symbol}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-slate-300">${stock.name}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-slate-100 font-medium">${stock.ltp ? '₹' + stock.ltp.toFixed(2) : '--'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="${colorClass} font-medium">${stock.ltp ? sign + stock.change.toFixed(2) : '--'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="${colorClass} font-medium">${stock.ltp ? sign + stock.changePercent.toFixed(2) + '%' : '--'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-slate-400 text-sm">${stock.volume ? (stock.volume / 1000000).toFixed(2) + 'M' : '--'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <button class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-full transition-colors">
+                                    Buy
+                                </button>
+                                <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-full transition-colors">
+                                    Sell
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Render pagination
+            let paginationHtml = '';
+            if (totalPages > 1) {
+                paginationHtml = `
+                    <div class="flex items-center justify-between px-6 py-4 border-t border-slate-800">
+                        <span class="text-sm text-slate-400">Showing ${startIndex + 1}-${endIndex} of ${filteredStocks.length} stocks</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">First</button>
+                            <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Prev</button>
+                            <span class="px-3 py-1.5 text-slate-400 text-sm">Page ${currentPage} of ${totalPages}</span>
+                            <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Next</button>
+                            <button onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Last</button>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('pagination-container').innerHTML = paginationHtml;
+        }
+
+        function goToPage(page) {
+            const totalStocks = allStocks.length;
+            const totalPages = Math.ceil(totalStocks / ITEMS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderStocks();
+            }
+        }
+
+        // Filter buttons
+        document.getElementById('btn-all').addEventListener('click', function() {
+            currentFilter = 'all';
+            currentPage = 1;
+            updateFilterButtons();
+            renderStocks();
+        });
+
+        document.getElementById('btn-watchlist').addEventListener('click', function() {
+            currentFilter = 'watchlist';
+            currentPage = 1;
+            updateFilterButtons();
+            renderStocks();
+        });
+
+        document.getElementById('btn-gainers').addEventListener('click', function() {
+            currentFilter = 'gainers';
+            currentPage = 1;
+            updateFilterButtons();
+            renderStocks();
+        });
+
+        document.getElementById('btn-losers').addEventListener('click', function() {
+            currentFilter = 'losers';
+            currentPage = 1;
+            updateFilterButtons();
+            renderStocks();
+        });
+
+        function updateFilterButtons() {
+            const buttons = {
+                'all': document.getElementById('btn-all'),
+                'watchlist': document.getElementById('btn-watchlist'),
+                'gainers': document.getElementById('btn-gainers'),
+                'losers': document.getElementById('btn-losers')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                const btn = buttons[key];
+                if (key === currentFilter) {
+                    btn.className = 'px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium text-sm';
+                } else {
+                    btn.className = 'px-4 py-2 text-slate-400 hover:bg-slate-800 border border-slate-800 rounded-lg text-sm transition-colors';
+                }
+            });
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', renderStocks);
+
+        // Initial load - fetch stocks from JSON file
+        loadStocksFromJSON();
+
+        // Chart instances
+        let niftyChart = null;
+        let sensexChart = null;
+
+        // Fetch historical data for charts
+        async function fetchChartData(symbol) {
+            try {
+                const corsProxy = 'https://corsproxy.io/?';
+                const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1wk&range=1y`;
+                const response = await fetch(corsProxy + apiUrl);
+                const data = await response.json();
+                
+                if (data.chart && data.chart.result && data.chart.result[0]) {
+                    const result = data.chart.result[0];
+                    const timestamps = result.timestamp;
+                    const prices = result.indicators.quote[0].close;
+                    
+                    return {
+                        labels: timestamps.map(ts => new Date(ts * 1000).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })),
+                        data: prices
+                    };
+                }
+                return null;
+            } catch (error) {
+                console.error(`Error fetching chart data for ${symbol}:`, error);
+                return null;
+            }
+        }
+
+        // Initialize charts
+        async function initCharts() {
+            // Destroy existing charts to prevent duplication
+            if (niftyChart) {
+                niftyChart.destroy();
+                niftyChart = null;
+            }
+            if (sensexChart) {
+                sensexChart.destroy();
+                sensexChart = null;
+            }
+
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: '#1e293b',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#334155',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#1e293b' },
+                        ticks: { color: '#64748b', maxTicksLimit: 8 }
+                    },
+                    y: {
+                        grid: { color: '#1e293b' },
+                        ticks: { color: '#64748b' },
+                        min: 21000,
+                        max: 27000
+                    }
+                }
+            };
+
+            // NIFTY Chart
+            const niftyData = await fetchChartData('^NSEI');
+            if (niftyData) {
+                const ctx = document.getElementById('nifty-chart').getContext('2d');
+                niftyChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: niftyData.labels,
+                        datasets: [{
+                            label: 'NIFTY 50',
+                            data: niftyData.data,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: commonOptions
+                });
+            }
+
+            // SENSEX Chart
+            const sensexData = await fetchChartData('^BSESN');
+            if (sensexData) {
+                // Create sensex-specific options with its own y-axis limits
+                const sensexOptions = JSON.parse(JSON.stringify(commonOptions));
+                sensexOptions.scales.y.min = 72000;
+                sensexOptions.scales.y.max = 86000;
+
+                const ctx = document.getElementById('sensex-chart').getContext('2d');
+                sensexChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: sensexData.labels,
+                        datasets: [{
+                            label: 'SENSEX',
+                            data: sensexData.data,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: sensexOptions
+                });
+            }
+        }
+
+        // Initialize charts after page load
+        window.addEventListener('load', initCharts);
+    </script>
+</body>
+</html>

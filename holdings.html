@@ -95,7 +95,7 @@
             <!-- Dashboard Content -->
             <div class="p-8">
                 <!-- Portfolio Summary Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <!-- Invested -->
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
                         <div class="flex items-center justify-between mb-2">
@@ -110,15 +110,6 @@
                             <span class="text-sm text-slate-400">Current</span>
                         </div>
                         <div class="text-2xl font-bold text-slate-100">₹10.34k</div>
-                    </div>
-
-                    <!-- Day's P&L -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm text-slate-400">Day's P&L</span>
-                        </div>
-                        <div class="text-2xl font-bold text-emerald-400">₹236.85</div>
-                        <div class="text-sm text-emerald-400 mt-1">2.34%</div>
                     </div>
 
                     <!-- Total P&L -->
@@ -141,155 +132,11 @@
                     </div>
                 </div>
 
-                <!-- Market Overview -->
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-slate-100">Market Overview</h2>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                            <span class="text-xs text-slate-500">Live</span>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div id="nifty-data">
-                            <p class="text-sm text-slate-400 mb-1">NIFTY 50</p>
-                            <p class="text-xl font-bold text-slate-100">--</p>
-                            <p class="text-sm text-slate-500">Loading...</p>
-                        </div>
-                        <div id="sensex-data">
-                            <p class="text-sm text-slate-400 mb-1">SENSEX</p>
-                            <p class="text-xl font-bold text-slate-100">--</p>
-                            <p class="text-sm text-slate-500">Loading...</p>
-                        </div>
-                        <div id="banknifty-data">
-                            <p class="text-sm text-slate-400 mb-1">BANK NIFTY</p>
-                            <p class="text-xl font-bold text-slate-100">--</p>
-                            <p class="text-sm text-slate-500">Loading...</p>
-                        </div>
-                        <div id="niftyit-data">
-                            <p class="text-sm text-slate-400 mb-1">NIFTY IT</p>
-                            <p class="text-xl font-bold text-slate-100">--</p>
-                            <p class="text-sm text-slate-500">Loading...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Charts -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- NIFTY 50 Chart -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-slate-100 mb-4">NIFTY 50</h3>
-                        <div style="position: relative; width: 100%; height: 250px;">
-                            <canvas id="nifty-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- SENSEX Chart -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-slate-100 mb-4">SENSEX</h3>
-                        <div style="position: relative; width: 100%; height: 250px;">
-                            <canvas id="sensex-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
 
-    <!-- Live Market Data Script -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Generate dynamic mock data based on today's date
-        function generateMockChartData() {
-            const today = new Date(2026, 1, 4); // Feb 4, 2026
-            const labels = [];
-            const niftyData = [];
-            const sensexData = [];
-            
-            // Generate 52 weeks of data backwards from today
-            let baseNifty = 21850;
-            let baseSensex = 73200;
-            
-            for (let i = 51; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(date.getDate() - (i * 7));
-                labels.push(`${String(date.getDate()).padStart(2, '0')} ${date.toLocaleDateString('en-US', {month: 'short'})} ${date.getFullYear()}`);
-                
-                // Add realistic fluctuations
-                niftyData.push(baseNifty + Math.random() * 800 - 400);
-                sensexData.push(baseSensex + Math.random() * 2500 - 1200);
-                
-                baseNifty += Math.random() * 300 - 100;
-                baseSensex += Math.random() * 800 - 300;
-            }
-            
-            // End with today's actual values
-            labels.push('Feb 04 2026');
-            niftyData[niftyData.length - 1] = 25776;
-            sensexData[sensexData.length - 1] = 83817;
-            
-            return {
-                '^NSEI': { labels, data: niftyData.map(d => Math.round(d)) },
-                '^BSESN': { labels, data: sensexData.map(d => Math.round(d)) }
-            };
-        }
-
-        const mockChartData = generateMockChartData();
-
-        // Mock market data
-        const mockMarketData = {
-            '^NSEI': { price: 25776.00, change: 324.50, changePercent: 1.27 },
-            '^BSESN': { price: 83817.00, change: 685.40, changePercent: 0.82 },
-            '^NSEBANK': { price: 54320.00, change: 812.30, changePercent: 1.52 },
-            '^CNXIT': { price: 20145.00, change: 425.60, changePercent: 2.16 }
-        };
-
-        // Fetch live market data from Yahoo Finance with fast CORS proxy
-        async function fetchMarketData(symbol, elementId, displayName) {
-            try {
-                const corsProxy = 'https://corsproxy.io/?';
-                const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
-                const response = await fetch(corsProxy + apiUrl);
-                const data = await response.json();
-                
-                if (data.chart && data.chart.result && data.chart.result[0]) {
-                    const result = data.chart.result[0];
-                    const meta = result.meta;
-                    
-                    const currentPrice = meta.regularMarketPrice || meta.previousClose;
-                    const previousClose = meta.chartPreviousClose || meta.previousClose;
-                    const change = currentPrice - previousClose;
-                    const changePercent = (change / previousClose) * 100;
-                    
-                    const element = document.getElementById(elementId);
-                    const isPositive = change >= 0;
-                    const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
-                    const sign = isPositive ? '+' : '';
-                    
-                    element.innerHTML = `
-                        <p class="text-sm text-slate-400 mb-1">${displayName}</p>
-                        <p class="text-xl font-bold text-slate-100">${currentPrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                        <p class="text-sm ${colorClass}">${sign}${change.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)</p>
-                    `;
-                }
-            } catch (error) {
-                console.error(`Error fetching ${symbol}:`, error);
-                document.getElementById(elementId).innerHTML = `
-                    <p class="text-sm text-slate-400 mb-1">${displayName}</p>
-                    <p class="text-xl font-bold text-slate-100">--</p>
-                    <p class="text-sm text-slate-500">Loading...</p>
-                `;
-            }
-        }
-
-        // Load market data
-        function loadMarketData() {
-            fetchMarketData('^NSEI', 'nifty-data', 'NIFTY 50');
-            fetchMarketData('^BSESN', 'sensex-data', 'SENSEX');
-            fetchMarketData('^NSEBANK', 'banknifty-data', 'BANK NIFTY');
-            fetchMarketData('^CNXIT', 'niftyit-data', 'NIFTY IT');
-        }
-
         // Load holdings from localStorage
         function loadHoldings() {
             const holdings = JSON.parse(localStorage.getItem('userHoldings') || '[]');
@@ -364,150 +211,7 @@
         }
 
         // Initial load
-        loadMarketData();
         loadHoldings();
-
-        // Auto-refresh every 60 seconds
-        setInterval(loadMarketData, 60000);
-
-        // Chart instances
-        let niftyChart = null;
-        let sensexChart = null;
-
-        // Fetch chart data from live Yahoo Finance with fast CORS proxy
-        async function fetchChartData(symbol) {
-            try {
-                const corsProxy = 'https://corsproxy.io/?';
-                const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1wk&range=1y`;
-                const response = await fetch(corsProxy + apiUrl);
-                const data = await response.json();
-                
-                if (data.chart && data.chart.result && data.chart.result[0]) {
-                    const result = data.chart.result[0];
-                    const timestamps = result.timestamp;
-                    const prices = result.indicators.quote[0].close;
-                    
-                    return {
-                        labels: timestamps.map(ts => new Date(ts * 1000).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })),
-                        data: prices
-                    };
-                }
-                return null;
-            } catch (error) {
-                console.error(`Error fetching chart data for ${symbol}:`, error);
-                return null;
-            }
-        }
-
-        // Initialize charts with live data
-        async function initCharts() {
-            // Destroy existing charts to prevent duplication
-            if (niftyChart) {
-                niftyChart.destroy();
-                niftyChart = null;
-            }
-            if (sensexChart) {
-                sensexChart.destroy();
-                sensexChart = null;
-            }
-
-            const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: '#1e293b',
-                        titleColor: '#f1f5f9',
-                        bodyColor: '#cbd5e1',
-                        borderColor: '#334155',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: '#1e293b' },
-                        ticks: { color: '#64748b', maxTicksLimit: 8 }
-                    },
-                    y: {
-                        grid: { color: '#1e293b' },
-                        ticks: { color: '#64748b' },
-                        min: 21000,
-                        max: 27000
-                    }
-                }
-            };
-
-            // NIFTY Chart
-
-            // NIFTY Chart
-            const niftyData = await fetchChartData('^NSEI');
-            if (niftyData) {
-                const ctx = document.getElementById('nifty-chart').getContext('2d');
-                niftyChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: niftyData.labels,
-                        datasets: [{
-                            label: 'NIFTY 50',
-                            data: niftyData.data,
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 2
-                        }]
-                    },
-                    options: commonOptions
-                });
-            }
-
-            // SENSEX Chart
-            const sensexData = await fetchChartData('^BSESN');
-            if (sensexData) {
-                // Create sensex-specific options with its own y-axis limits
-                const sensexOptions = JSON.parse(JSON.stringify(commonOptions));
-                sensexOptions.scales.y.min = 72000;
-                sensexOptions.scales.y.max = 86000;
-
-                const ctx = document.getElementById('sensex-chart').getContext('2d');
-                sensexChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: sensexData.labels,
-                        datasets: [{
-                            label: 'SENSEX',
-                            data: sensexData.data,
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 2
-                        }]
-                    },
-                    options: sensexOptions
-                });
-            }
-        }
-
-        // Initialize charts with delay to ensure Chart.js is loaded
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                try {
-                    if (typeof Chart !== 'undefined') {
-                        initCharts();
-                        console.log('Charts initialized successfully');
-                    } else {
-                        console.error('Chart.js library not loaded');
-                    }
-                } catch(e) {
-                    console.error('Error initializing charts:', e);
-                }
-            }, 1000);
-        });
     </script>
 </body>
 </html>
