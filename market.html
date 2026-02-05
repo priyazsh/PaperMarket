@@ -202,10 +202,10 @@
                             </tr>
                         </thead>
                         <tbody id="stocks-tbody" class="divide-y divide-slate-800">
-                        <tbody id="stocks-tbody" class="divide-y divide-slate-800">
                             <!-- Stock rows will be dynamically generated here -->
                         </tbody>
                     </table>
+                    <div id="pagination-container"></div>
                 </div>
             </div>
         </main>
@@ -548,10 +548,62 @@
 
         let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
         let currentFilter = 'all';
-        let customStocks = JSON.parse(localStorage.getItem('customStocks') || '[]');
+        let allStocks = [];
 
-        // Merge custom stocks with default stocks
-        let allStocks = [...stocksData, ...customStocks];
+        // Load stocks from local JSON file
+        async function loadStocksFromJSON() {
+            try {
+                const response = await fetch('stocks.json');
+                if (!response.ok) throw new Error('Failed to load stocks.json');
+                const data = await response.json();
+                allStocks = data.map(stock => ({
+                    symbol: stock.symbol,
+                    name: stock.name,
+                    volume: stock.volume || 0,
+                    ltp: 0,
+                    change: 0,
+                    changePercent: 0
+                }));
+                console.log(`Loaded ${allStocks.length} stocks from JSON`);
+                renderStocks();
+                // Fetch live prices for visible stocks
+                fetchLivePrices();
+            } catch (error) {
+                console.error('Error loading stocks:', error);
+                // Fallback to hardcoded data
+                allStocks = [...stocksData];
+                renderStocks();
+            }
+        }
+
+        // Fetch live prices from Yahoo Finance for first batch
+        async function fetchLivePrices() {
+            const visibleStocks = allStocks.slice(0, 50);
+            const corsProxy = 'https://corsproxy.io/?';
+            
+            for (const stock of visibleStocks) {
+                try {
+                    const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${stock.symbol}.NS?interval=1d&range=1d`;
+                    const response = await fetch(corsProxy + apiUrl);
+                    const data = await response.json();
+                    
+                    if (data.chart?.result?.[0]) {
+                        const meta = data.chart.result[0].meta;
+                        const currentPrice = meta.regularMarketPrice || meta.previousClose;
+                        const previousClose = meta.chartPreviousClose || meta.previousClose;
+                        const change = currentPrice - previousClose;
+                        const changePercent = previousClose ? (change / previousClose) * 100 : 0;
+                        
+                        stock.ltp = currentPrice || 0;
+                        stock.change = change || 0;
+                        stock.changePercent = changePercent || 0;
+                    }
+                } catch (e) {
+                    // Keep default values
+                }
+            }
+            renderStocks();
+        }
 
         // Toggle watchlist
         function toggleWatchlist(symbol) {
@@ -564,6 +616,10 @@
             localStorage.setItem('watchlist', JSON.stringify(watchlist));
             renderStocks();
         }
+
+        // Pagination
+        const ITEMS_PER_PAGE = 10;
+        let currentPage = 1;
 
         // Render stock rows
         function renderStocks() {
@@ -601,10 +657,17 @@
                         </td>
                     </tr>
                 `;
+                document.getElementById('pagination-container').innerHTML = '';
                 return;
             }
 
-            tbody.innerHTML = filteredStocks.map(stock => {
+            // Pagination
+            const totalPages = Math.ceil(filteredStocks.length / ITEMS_PER_PAGE);
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredStocks.length);
+            const pageStocks = filteredStocks.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageStocks.map(stock => {
                 const isPositive = stock.change >= 0;
                 const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
                 const sign = isPositive ? '+' : '';
@@ -627,16 +690,16 @@
                             <span class="text-sm text-slate-300">${stock.name}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <span class="text-slate-100 font-medium">₹${stock.ltp.toFixed(2)}</span>
+                            <span class="text-slate-100 font-medium">${stock.ltp ? '₹' + stock.ltp.toFixed(2) : '--'}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <span class="${colorClass} font-medium">${sign}${stock.change.toFixed(2)}</span>
+                            <span class="${colorClass} font-medium">${stock.ltp ? sign + stock.change.toFixed(2) : '--'}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <span class="${colorClass} font-medium">${sign}${stock.changePercent.toFixed(2)}%</span>
+                            <span class="${colorClass} font-medium">${stock.ltp ? sign + stock.changePercent.toFixed(2) + '%' : '--'}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <span class="text-slate-400 text-sm">${stock.volume}</span>
+                            <span class="text-slate-400 text-sm">${stock.volume ? (stock.volume / 1000000).toFixed(2) + 'M' : '--'}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end space-x-2">
@@ -651,29 +714,60 @@
                     </tr>
                 `;
             }).join('');
+
+            // Render pagination
+            let paginationHtml = '';
+            if (totalPages > 1) {
+                paginationHtml = `
+                    <div class="flex items-center justify-between px-6 py-4 border-t border-slate-800">
+                        <span class="text-sm text-slate-400">Showing ${startIndex + 1}-${endIndex} of ${filteredStocks.length} stocks</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">First</button>
+                            <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Prev</button>
+                            <span class="px-3 py-1.5 text-slate-400 text-sm">Page ${currentPage} of ${totalPages}</span>
+                            <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Next</button>
+                            <button onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-300 rounded transition-colors text-sm">Last</button>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('pagination-container').innerHTML = paginationHtml;
+        }
+
+        function goToPage(page) {
+            const totalStocks = allStocks.length;
+            const totalPages = Math.ceil(totalStocks / ITEMS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderStocks();
+            }
         }
 
         // Filter buttons
         document.getElementById('btn-all').addEventListener('click', function() {
             currentFilter = 'all';
+            currentPage = 1;
             updateFilterButtons();
             renderStocks();
         });
 
         document.getElementById('btn-watchlist').addEventListener('click', function() {
             currentFilter = 'watchlist';
+            currentPage = 1;
             updateFilterButtons();
             renderStocks();
         });
 
         document.getElementById('btn-gainers').addEventListener('click', function() {
             currentFilter = 'gainers';
+            currentPage = 1;
             updateFilterButtons();
             renderStocks();
         });
 
         document.getElementById('btn-losers').addEventListener('click', function() {
             currentFilter = 'losers';
+            currentPage = 1;
             updateFilterButtons();
             renderStocks();
         });
@@ -696,11 +790,14 @@
             });
         }
 
-        // Search functionality
-        document.getElementById('search-input').addEventListener('input', renderStocks);
+        // Search functionality - reset to page 1 when searching
+        document.getElementById('search-input').addEventListener('input', function() {
+            currentPage = 1;
+            renderStocks();
+        });
 
-        // Initial render
-        renderStocks();
+        // Initial load - fetch stocks from JSON file
+        loadStocksFromJSON();
 
         // Chart instances
         let niftyChart = null;
