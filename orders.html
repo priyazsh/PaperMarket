@@ -5,47 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders - Paper Market</title>
     <script src="tailwindcss.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0.3;
+        }
+        .stat-card.emerald::before { color: rgb(16, 185, 129); }
+        .stat-card.rose::before { color: rgb(244, 63, 94); }
+        .stat-card.cyan::before { color: rgb(6, 182, 212); }
+        .stat-card.purple::before { color: rgb(168, 85, 247); }
+        .table-row-animate {
+            animation: slideUp 0.4s ease-out forwards;
+            opacity: 0;
+        }
+        .nav-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: rgb(16, 185, 129);
+            border-radius: 0 4px 4px 0;
+        }
+        .sidebar-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .export-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .export-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: left 0.5s;
+        }
+        .export-btn:hover::after {
+            left: 150%;
+        }
+    </style>
 </head>
 <body class="bg-slate-950 min-h-screen">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+        <aside class="w-64 bg-slate-900/80 backdrop-blur-xl border-r border-slate-800/50 flex flex-col relative overflow-hidden">
+            <!-- Ambient Glow -->
+            <div class="sidebar-glow -top-20 -left-20"></div>
+            
             <!-- Logo -->
-            <div class="p-6 border-b border-slate-800">
+            <div class="p-6 border-b border-slate-800/50">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-11 h-11 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-slate-100">Paper Market</span>
+                    <span class="text-xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">Paper Market</span>
                 </div>
             </div>
 
             <!-- Navigation -->
             <nav class="flex-1 p-4 space-y-1">
-                <a href="holdings.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                <a href="holdings.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     <span>Holdings</span>
                 </a>
 
-                <a href="market.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                <a href="market.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                     </svg>
                     <span>Market</span>
                 </a>
 
-                <a href="funds.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                <a href="funds.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
                     <span>Funds</span>
                 </a>
 
-                <a href="orders.html" class="flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium">
+                <a href="orders.html" class="nav-item active flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-medium">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
@@ -54,15 +150,18 @@
             </nav>
 
             <!-- User Profile -->
-            <div class="p-4 border-t border-slate-800">
-                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800 rounded-lg cursor-pointer transition-colors">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
-                        <span class="text-sm font-medium text-slate-300">JD</span>
+            <div class="p-4 border-t border-slate-800/50">
+                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
+                        <span class="text-sm font-bold text-white">JD</span>
                     </div>
                     <div class="flex-1">
                         <p class="text-sm font-medium text-slate-100">John Doe</p>
                         <p class="text-xs text-slate-500">john@example.com</p>
                     </div>
+                    <svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
                 </div>
             </div>
         </aside>
@@ -70,27 +169,35 @@
         <!-- Main Content -->
         <main class="flex-1 overflow-auto">
             <!-- Top Header -->
-            <header class="bg-slate-900 border-b border-slate-800 px-8 py-4">
+            <header class="glass-card border-b border-slate-800/50 px-8 py-5 sticky top-0 z-10">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="animate-fadeIn">
                         <h1 class="text-2xl font-bold text-slate-100">Orders</h1>
-                        <p class="text-sm text-slate-400 mt-1">All your executed trades</p>
+                        <p class="text-sm text-slate-400 mt-1">Track all your executed trades</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <!-- Filter Dropdown -->
-                        <select class="px-4 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                        <select class="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 text-sm focus:outline-none focus:border-emerald-500/50 transition-colors cursor-pointer">
                             <option>All Trades</option>
                             <option>Buy Orders</option>
                             <option>Sell Orders</option>
                         </select>
 
                         <!-- Date Range -->
-                        <select class="px-4 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                        <select class="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 text-sm focus:outline-none focus:border-emerald-500/50 transition-colors cursor-pointer">
                             <option>Last 7 Days</option>
                             <option>Last 30 Days</option>
                             <option>Last 3 Months</option>
                             <option>Last Year</option>
                         </select>
+
+                        <!-- Export Button -->
+                        <button class="export-btn flex items-center space-x-2 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-all duration-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            <span>Export</span>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -99,394 +206,359 @@
             <div class="p-8">
                 <!-- Summary Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <p class="text-sm text-slate-400 mb-1">Total Trades</p>
-                        <p class="text-2xl font-bold text-slate-100">24</p>
+                    <div class="stat-card purple glass-card rounded-2xl p-6 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-sm text-slate-400">Total Trades</p>
+                            <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-100">24</p>
+                        <p class="text-xs text-slate-500 mt-1">This month</p>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <p class="text-sm text-slate-400 mb-1">Buy Orders</p>
-                        <p class="text-2xl font-bold text-emerald-400">14</p>
+                    <div class="stat-card emerald glass-card rounded-2xl p-6 animate-slideUp" style="animation-delay: 0.2s; opacity: 0;">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-sm text-slate-400">Buy Orders</p>
+                            <div class="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-emerald-400">14</p>
+                        <p class="text-xs text-emerald-500/70 mt-1">58% of trades</p>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <p class="text-sm text-slate-400 mb-1">Sell Orders</p>
-                        <p class="text-2xl font-bold text-rose-400">10</p>
+                    <div class="stat-card rose glass-card rounded-2xl p-6 animate-slideUp" style="animation-delay: 0.3s; opacity: 0;">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-sm text-slate-400">Sell Orders</p>
+                            <div class="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-rose-400">10</p>
+                        <p class="text-xs text-rose-500/70 mt-1">42% of trades</p>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                        <p class="text-sm text-slate-400 mb-1">Total Volume</p>
-                        <p class="text-2xl font-bold text-slate-100">₹2.4L</p>
+                    <div class="stat-card cyan glass-card rounded-2xl p-6 animate-slideUp" style="animation-delay: 0.4s; opacity: 0;">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-sm text-slate-400">Total Volume</p>
+                            <div class="w-10 h-10 bg-cyan-500/10 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-100">₹2.4L</p>
+                        <p class="text-xs text-slate-500 mt-1">Traded this month</p>
                     </div>
                 </div>
 
                 <!-- Trades Table -->
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-800">
-                        <h2 class="text-lg font-semibold text-slate-100">Recent Trades</h2>
+                <div class="glass-card rounded-2xl overflow-hidden animate-slideUp" style="animation-delay: 0.5s; opacity: 0;">
+                    <div class="px-6 py-5 border-b border-slate-800/50 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-100">Recent Trades</h2>
+                            <p class="text-xs text-slate-500 mt-1">Your complete trading history</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="flex items-center space-x-1 text-xs text-slate-500">
+                                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                <span>Live</span>
+                            </span>
+                        </div>
                     </div>
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-slate-800 bg-slate-900/50">
-                                <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date & Time</th>
-                                <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
-                                <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Symbol</th>
-                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Quantity</th>
-                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Price</th>
-                                <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Value</th>
-                                <th class="text-center px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800">
-                            <!-- Trade Row 1 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Feb 4, 2026</p>
-                                        <p class="text-xs text-slate-500">11:45 AM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">RELIANCE</p>
-                                        <p class="text-xs text-slate-500">Reliance Industries</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">10</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹2,450.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹24,500</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-slate-800/50 bg-slate-900/30">
+                                    <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date & Time</th>
+                                    <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
+                                    <th class="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Symbol</th>
+                                    <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Quantity</th>
+                                    <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Price</th>
+                                    <th class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Value</th>
+                                    <th class="text-center px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/30">
+                                <!-- Trade Row 1 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.6s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Feb 4, 2026</p>
+                                            <p class="text-xs text-slate-500">11:45 AM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                            BUY
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">R</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">RELIANCE</p>
+                                                <p class="text-xs text-slate-500">Reliance Industries</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">10</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹2,450.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹24,500</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
 
-                            <!-- Trade Row 2 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Feb 4, 2026</p>
-                                        <p class="text-xs text-slate-500">09:15 AM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                        SELL
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">INFY</p>
-                                        <p class="text-xs text-slate-500">Infosys</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">5</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹1,620.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹8,100</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
+                                <!-- Trade Row 2 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.7s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Feb 4, 2026</p>
+                                            <p class="text-xs text-slate-500">09:15 AM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                            SELL
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">I</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">INFY</p>
+                                                <p class="text-xs text-slate-500">Infosys</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">5</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹1,620.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹8,100</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
 
-                            <!-- Trade Row 3 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Feb 3, 2026</p>
-                                        <p class="text-xs text-slate-500">02:30 PM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">TCS</p>
-                                        <p class="text-xs text-slate-500">Tata Consultancy Services</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">8</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹3,520.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹28,160</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
+                                <!-- Trade Row 3 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.8s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Feb 3, 2026</p>
+                                            <p class="text-xs text-slate-500">02:30 PM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                            BUY
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">TCS</p>
+                                                <p class="text-xs text-slate-500">Tata Consultancy Services</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">8</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹3,520.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹28,160</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
 
-                            <!-- Trade Row 4 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Feb 2, 2026</p>
-                                        <p class="text-xs text-slate-500">10:20 AM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">HDFC</p>
-                                        <p class="text-xs text-slate-500">HDFC Bank</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">15</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹1,680.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹25,200</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
+                                <!-- Trade Row 4 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.9s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Feb 2, 2026</p>
+                                            <p class="text-xs text-slate-500">10:20 AM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                            BUY
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center text-white text-xs font-bold">H</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">HDFC</p>
+                                                <p class="text-xs text-slate-500">HDFC Bank</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">15</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹1,680.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹25,200</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
 
-                            <!-- Trade Row 5 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Feb 1, 2026</p>
-                                        <p class="text-xs text-slate-500">01:45 PM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                        SELL
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">BAJAJ</p>
-                                        <p class="text-xs text-slate-500">Bajaj Finance</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">2</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹7,100.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹14,200</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
+                                <!-- Trade Row 5 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 1s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Feb 1, 2026</p>
+                                            <p class="text-xs text-slate-500">01:45 PM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                            SELL
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">B</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">BAJAJ</p>
+                                                <p class="text-xs text-slate-500">Bajaj Finance</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">2</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹7,100.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹14,200</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
 
-                            <!-- Trade Row 6 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Jan 31, 2026</p>
-                                        <p class="text-xs text-slate-500">03:10 PM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">ICICI</p>
-                                        <p class="text-xs text-slate-500">ICICI Bank</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">12</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹920.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹11,040</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <!-- Trade Row 7 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Jan 30, 2026</p>
-                                        <p class="text-xs text-slate-500">11:00 AM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">WIPRO</p>
-                                        <p class="text-xs text-slate-500">Wipro</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">20</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹440.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹8,800</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <!-- Trade Row 8 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Jan 29, 2026</p>
-                                        <p class="text-xs text-slate-500">02:15 PM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                        SELL
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">HCLTECH</p>
-                                        <p class="text-xs text-slate-500">HCL Technologies</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">10</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹1,400.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹14,000</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <!-- Trade Row 9 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Jan 28, 2026</p>
-                                        <p class="text-xs text-slate-500">10:30 AM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                        BUY
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">ASIANPAINT</p>
-                                        <p class="text-xs text-slate-500">Asian Paints</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">3</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹3,000.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹9,000</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <!-- Trade Row 10 -->
-                            <tr class="hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm text-slate-100">Jan 27, 2026</p>
-                                        <p class="text-xs text-slate-500">01:50 PM</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                        SELL
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-100">MARUTI</p>
-                                        <p class="text-xs text-slate-500">Maruti Suzuki</p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">1</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100">₹11,200.00</span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-slate-100 font-medium">₹11,200</span>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                        Executed
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                <!-- Trade Row 6 -->
+                                <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 1.1s;">
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <p class="text-sm text-slate-100 font-medium">Jan 31, 2026</p>
+                                            <p class="text-xs text-slate-500">03:10 PM</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                            BUY
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">I</div>
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-100 group-hover:text-emerald-400 transition-colors">ICICI</p>
+                                                <p class="text-xs text-slate-500">ICICI Bank</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-medium">12</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100">₹920.00</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span class="text-slate-100 font-semibold">₹11,040</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
+                                            Executed
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-slate-800/50 flex items-center justify-between">
+                        <p class="text-sm text-slate-500">Showing <span class="text-slate-300 font-medium">1-6</span> of <span class="text-slate-300 font-medium">24</span> trades</p>
+                        <div class="flex items-center space-x-2">
+                            <button class="p-2 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-lg transition-colors disabled:opacity-50" disabled>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button class="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-lg font-medium text-sm">1</button>
+                            <button class="w-8 h-8 text-slate-400 hover:bg-slate-800/50 rounded-lg font-medium text-sm transition-colors">2</button>
+                            <button class="w-8 h-8 text-slate-400 hover:bg-slate-800/50 rounded-lg font-medium text-sm transition-colors">3</button>
+                            <button class="w-8 h-8 text-slate-400 hover:bg-slate-800/50 rounded-lg font-medium text-sm transition-colors">4</button>
+                            <button class="p-2 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
             </div>
         </main>
     </div>

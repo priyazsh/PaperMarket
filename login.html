@@ -5,23 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Paper Market</title>
     <script src="tailwindcss.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); }
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delay { animation: float 6s ease-in-out infinite; animation-delay: -3s; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-gradient { 
+            background-size: 200% 200%;
+            animation: gradient-shift 8s ease infinite;
+        }
+        .animate-slideUp { animation: slideUp 0.6s ease-out forwards; }
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1), 0 0 20px rgba(16, 185, 129, 0.1);
+        }
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-950 min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="floating-shape w-96 h-96 bg-emerald-500 top-0 -left-48 animate-float"></div>
+        <div class="floating-shape w-80 h-80 bg-cyan-500 bottom-0 right-0 animate-float-delay"></div>
+        <div class="floating-shape w-64 h-64 bg-purple-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-float"></div>
+    </div>
+
+    <!-- Grid Pattern Overlay -->
+    <div class="fixed inset-0 opacity-[0.02] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
     <!-- Login Container -->
-    <div class="w-full max-w-md">
+    <div class="w-full max-w-md relative z-10">
         <!-- Logo & Title -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-4">
-                <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center mb-8 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl mb-4 animate-pulse-glow">
+                <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold text-slate-100 mb-2">Paper Market</h1>
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-slate-100 via-emerald-200 to-slate-100 bg-clip-text text-transparent mb-2">Paper Market</h1>
             <p class="text-slate-400">Professional paper trading platform</p>
         </div>
 
         <!-- Login Card -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-8">
+        <div class="glass-card rounded-2xl p-8 shadow-2xl animate-slideUp" style="animation-delay: 0.2s; opacity: 0;">
             <h2 class="text-xl font-semibold text-slate-100 mb-6">Sign in to your account</h2>
             
             <!-- Login Form -->
@@ -32,7 +107,7 @@
                     <input 
                         type="email" 
                         id="email" 
-                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
+                        class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="you@example.com"
                     >
                 </div>
@@ -40,27 +115,35 @@
                 <!-- Password Field -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-slate-300 mb-2">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors" 
-                        placeholder="••••••••"
-                    >
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
+                            placeholder="••••••••"
+                        >
+                        <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                            <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between">
-                    <label class="flex items-center">
-                        <input type="checkbox" class="w-4 h-4 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0">
-                        <span class="ml-2 text-sm text-slate-400">Remember me</span>
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" class="w-4 h-4 rounded border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
+                        <span class="ml-2 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Remember me</span>
                     </label>
-                    <a href="#" class="text-sm text-emerald-500 hover:text-emerald-400 transition-colors">Forgot password?</a>
+                    <a href="#" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium">Forgot password?</a>
                 </div>
 
                 <!-- Sign In Button -->
                 <button 
                     type="submit" 
-                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                    class="btn-shine w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
                 >
                     Sign in
                 </button>
@@ -69,22 +152,22 @@
             <!-- Divider -->
             <div class="relative my-6">
                 <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-slate-800"></div>
+                    <div class="w-full border-t border-slate-700/50"></div>
                 </div>
                 <div class="relative flex justify-center text-sm">
-                    <span class="px-4 bg-slate-900 text-slate-500">Or continue with</span>
+                    <span class="px-4 bg-transparent text-slate-500">Or continue with</span>
                 </div>
             </div>
 
             <!-- Social Login Buttons -->
             <div class="grid grid-cols-2 gap-3">
-                <button class="flex items-center justify-center px-4 py-3 border border-slate-800 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors">
+                <button class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
                     </svg>
                     Google
                 </button>
-                <button class="flex items-center justify-center px-4 py-3 border border-slate-800 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors">
+                <button class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
                     </svg>
@@ -95,11 +178,36 @@
             <!-- Sign Up Link -->
             <p class="text-center text-sm text-slate-400 mt-6">
                 Don't have an account? 
-                <a href="#" class="text-emerald-500 hover:text-emerald-400 font-medium transition-colors">Sign up</a>
+                <a href="register.html" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign up</a>
             </p>
         </div>
 
-        <!-- Footer -->
+        <!-- Security Badge -->
+        <div class="text-center mt-6 animate-fadeIn" style="animation-delay: 0.5s; opacity: 0;">
+            <div class="inline-flex items-center space-x-2 text-slate-500 text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <span>Secured with 256-bit encryption</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (password.type === 'password') {
+                password.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>';
+            } else {
+                password.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            }
+        }
+    </script>
+</body>
+</html>        <!-- Footer -->
         <div class="text-center mt-8 text-sm text-slate-500">
             <p>&copy; 2026 Paper Market. All rights reserved.</p>
         </div>
