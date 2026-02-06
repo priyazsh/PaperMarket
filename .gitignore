@@ -1,0 +1,43 @@
+# ======================
+# Maven
+# ======================
+target/
+
+# ======================
+# Eclipse
+# ======================
+.classpath
+.project
+.settings/
+
+# ======================
+# IntelliJ / VS Code
+# ======================
+.idea/
+*.iml
+.vscode/
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Environment / Secrets
+# ======================
+*.env
+application-local.properties
+application-*.local.properties
+
+# ======================
+# Temporary / Cache
+# ======================
+*.tmp
+*.swp
+*.swo

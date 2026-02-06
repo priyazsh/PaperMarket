@@ -1,89 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Detail - Paper Market</title>
-    <script src="tailwindcss.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes pulse-price {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes toast-in {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes toast-out {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        .animate-slideUp { animation: slideUp 0.5s ease-out; }
-        .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
-        .pulse-price { animation: pulse-price 0.3s ease-out; }
-        .skeleton {
-            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        .toast-enter { animation: toast-in 0.3s ease-out; }
-        .toast-exit { animation: toast-out 0.3s ease-out forwards; }
-        .hover-lift {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            transition: all 0.2s ease;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-        }
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            transition: all 0.2s ease;
-        }
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-        }
-        .timeframe-btn {
-            transition: all 0.2s ease;
-        }
-        .timeframe-btn.active {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-            color: #10b981;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
-        }
-    </style>
+    <jsp:include page="/WEB-INF/views/common/head.jsp">
+        <jsp:param name="title" value="Stock Detail"/>
+    </jsp:include>
+    <link rel="stylesheet" href="css/chart.css">
 </head>
 <body class="bg-slate-950 min-h-screen">
-    <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-[100] space-y-3"></div>
 
-    <!-- Trade Modal -->
     <div id="trade-modal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeTradeModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4">
@@ -159,56 +85,15 @@
     </div>
 
     <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
-            <div class="p-6 border-b border-slate-800">
-                <a href="index.html" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                        <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-slate-100">Paper Market</span>
-                </a>
-            </div>
-            <nav class="flex-1 p-4 space-y-1">
-                <a href="holdings.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-all hover:translate-x-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    <span>Holdings</span>
-                </a>
-                <a href="market.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-all hover:translate-x-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-                    <span>Market</span>
-                </a>
-                <a href="funds.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-all hover:translate-x-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    <span>Funds</span>
-                </a>
-                <a href="orders.html" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-all hover:translate-x-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    <span>Orders</span>
-                </a>
-            </nav>
-            <div class="p-4 border-t border-slate-800">
-                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800 rounded-lg cursor-pointer transition-colors group">
-                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center">
-                        <span class="text-sm font-bold text-white">JD</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-slate-100">John Doe</p>
-                        <p class="text-xs text-slate-500">john@example.com</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
+        <jsp:include page="/WEB-INF/views/common/sidebar.jsp">
+            <jsp:param name="activePage" value="market"/>
+        </jsp:include>
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-auto">
-            <!-- Top Header -->
             <header class="bg-slate-900/80 backdrop-blur-lg border-b border-slate-800 px-8 py-4 sticky top-0 z-30">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
-                        <a href="market.html" class="w-10 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors">
+                        <a href="market" class="w-10 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors">
                             <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
@@ -239,7 +124,6 @@
             </header>
 
             <div class="p-8">
-                <!-- Price Section -->
                 <div class="mb-8 animate-slideUp">
                     <div class="flex items-end space-x-4 mb-2">
                         <h2 id="current-price" class="text-5xl font-bold text-white">--</h2>
@@ -250,9 +134,7 @@
                     <p class="text-slate-500 text-sm">NSE · Last updated: <span id="last-updated">--</span></p>
                 </div>
 
-                <!-- Chart Section -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 hover-lift animate-slideUp" style="animation-delay: 0.1s">
-                    <!-- Timeframe Selector -->
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-semibold text-slate-100">Price Chart</h3>
                         <div class="flex items-center space-x-2">
@@ -264,8 +146,7 @@
                             <button onclick="changeTimeframe('5y')" data-tf="5y" class="timeframe-btn px-4 py-2 text-sm font-medium text-slate-400 hover:text-white border border-slate-700 rounded-lg transition-all">5Y</button>
                         </div>
                     </div>
-                    
-                    <!-- Chart Container -->
+
                     <div id="chart-loading" class="h-[400px] flex items-center justify-center">
                         <div class="text-center">
                             <div class="w-12 h-12 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
@@ -277,7 +158,6 @@
                     </div>
                 </div>
 
-                <!-- Stats Grid -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.2s">
                         <p class="text-slate-400 text-sm mb-1">Open</p>
@@ -313,9 +193,7 @@
                     </div>
                 </div>
 
-                <!-- Additional Info -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- About -->
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover-lift animate-slideUp" style="animation-delay: 0.6s">
                         <h3 class="text-lg font-semibold text-slate-100 mb-4">About</h3>
                         <div class="space-y-3">
@@ -338,7 +216,6 @@
                         </div>
                     </div>
 
-                    <!-- Key Metrics -->
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover-lift animate-slideUp" style="animation-delay: 0.65s">
                         <h3 class="text-lg font-semibold text-slate-100 mb-4">Key Metrics</h3>
                         <div class="space-y-3">
@@ -367,16 +244,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Get stock symbol from URL
         const urlParams = new URLSearchParams(window.location.search);
         const stockSymbol = urlParams.get('symbol') || 'RELIANCE';
-        
+
         let stockData = null;
         let priceChart = null;
         let currentTimeframe = '1m';
         let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
 
-        // Toast notification
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -392,19 +267,18 @@
             setTimeout(() => { toast.classList.remove('toast-enter'); toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // Fetch stock data
         async function fetchStockData() {
             try {
                 const corsProxy = 'https://corsproxy.io/?';
                 const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}.NS?interval=1d&range=1d`;
                 const response = await fetch(corsProxy + apiUrl);
                 const data = await response.json();
-                
+
                 if (data.chart?.result?.[0]) {
                     const result = data.chart.result[0];
                     const meta = result.meta;
                     const quote = result.indicators.quote[0];
-                    
+
                     stockData = {
                         symbol: stockSymbol,
                         name: meta.longName || meta.shortName || stockSymbol,
@@ -417,43 +291,40 @@
                         fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh,
                         fiftyTwoWeekLow: meta.fiftyTwoWeekLow
                     };
-                    
+
                     updateUI();
                 }
             } catch (error) {
                 console.error('Error fetching stock data:', error);
-                // Use symbol as name if fetch fails
                 stockData = { symbol: stockSymbol, name: stockSymbol, price: 0 };
                 document.getElementById('stock-symbol').textContent = stockSymbol;
                 document.getElementById('stock-name').textContent = 'Unable to load stock data';
             }
         }
 
-        // Update UI with stock data
         function updateUI() {
             if (!stockData) return;
-            
+
             const change = stockData.price - stockData.prevClose;
             const changePercent = (change / stockData.prevClose) * 100;
             const isPositive = change >= 0;
             const sign = isPositive ? '+' : '';
             const colorClass = isPositive ? 'text-emerald-400' : 'text-red-400';
             const bgClass = isPositive ? 'bg-emerald-500/10' : 'bg-red-500/10';
-            
+
             document.getElementById('stock-symbol').textContent = stockData.symbol;
             document.getElementById('stock-name').textContent = stockData.name;
             document.getElementById('current-price').textContent = '₹' + stockData.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             document.getElementById('current-price').classList.add('pulse-price');
             setTimeout(() => document.getElementById('current-price').classList.remove('pulse-price'), 300);
-            
+
             document.getElementById('price-change').innerHTML = `
                 <span class="${colorClass} font-semibold">${sign}₹${Math.abs(change).toFixed(2)}</span>
                 <span class="${colorClass} ${bgClass} px-2 py-1 rounded-lg text-sm font-medium">${sign}${changePercent.toFixed(2)}%</span>
             `;
-            
+
             document.getElementById('last-updated').textContent = new Date().toLocaleTimeString('en-IN');
-            
-            // Stats
+
             document.getElementById('stat-open').textContent = stockData.open ? '₹' + stockData.open.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
             document.getElementById('stat-high').textContent = stockData.high ? '₹' + stockData.high.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
             document.getElementById('stat-low').textContent = stockData.low ? '₹' + stockData.low.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
@@ -461,30 +332,26 @@
             document.getElementById('stat-52w-high').textContent = stockData.fiftyTwoWeekHigh ? '₹' + stockData.fiftyTwoWeekHigh.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
             document.getElementById('stat-52w-low').textContent = stockData.fiftyTwoWeekLow ? '₹' + stockData.fiftyTwoWeekLow.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
             document.getElementById('stat-volume').textContent = stockData.volume ? (stockData.volume / 1000000).toFixed(2) + 'M' : '--';
-            
-            // Update watchlist button
+
             updateWatchlistButton();
-            
-            // Update page title
             document.title = `${stockData.symbol} - ₹${stockData.price.toFixed(2)} | Paper Market`;
         }
 
-        // Fetch chart data
         async function fetchChartData(timeframe) {
             const intervals = { '1d': '5m', '1w': '15m', '1m': '1d', '3m': '1d', '1y': '1wk', '5y': '1mo' };
             const ranges = { '1d': '1d', '1w': '5d', '1m': '1mo', '3m': '3mo', '1y': '1y', '5y': '5y' };
-            
+
             try {
                 const corsProxy = 'https://corsproxy.io/?';
                 const apiUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${stockSymbol}.NS?interval=${intervals[timeframe]}&range=${ranges[timeframe]}`;
                 const response = await fetch(corsProxy + apiUrl);
                 const data = await response.json();
-                
+
                 if (data.chart?.result?.[0]) {
                     const result = data.chart.result[0];
                     const timestamps = result.timestamp || [];
                     const prices = result.indicators.quote[0].close || [];
-                    
+
                     return {
                         labels: timestamps.map(ts => {
                             const date = new Date(ts * 1000);
@@ -502,23 +369,22 @@
             }
         }
 
-        // Initialize/Update chart
         async function initChart(timeframe = '1m') {
             document.getElementById('chart-loading').classList.remove('hidden');
             document.getElementById('chart-container').classList.add('hidden');
-            
+
             const chartData = await fetchChartData(timeframe);
-            
+
             if (chartData && chartData.data.length > 0) {
                 document.getElementById('chart-loading').classList.add('hidden');
                 document.getElementById('chart-container').classList.remove('hidden');
-                
+
                 if (priceChart) priceChart.destroy();
-                
+
                 const isPositive = chartData.data[chartData.data.length - 1] >= chartData.data[0];
                 const lineColor = isPositive ? '#10b981' : '#ef4444';
                 const bgColor = isPositive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-                
+
                 const ctx = document.getElementById('price-chart').getContext('2d');
                 priceChart = new Chart(ctx, {
                     type: 'line',
@@ -565,7 +431,7 @@
                             },
                             y: {
                                 grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                                ticks: { 
+                                ticks: {
                                     color: '#64748b',
                                     callback: (value) => '₹' + value.toLocaleString('en-IN')
                                 }
@@ -577,7 +443,6 @@
             }
         }
 
-        // Change timeframe
         function changeTimeframe(tf) {
             currentTimeframe = tf;
             document.querySelectorAll('.timeframe-btn').forEach(btn => {
@@ -587,7 +452,6 @@
             initChart(tf);
         }
 
-        // Watchlist functions
         function toggleWatchlist() {
             const index = watchlist.indexOf(stockSymbol);
             if (index > -1) {
@@ -610,17 +474,16 @@
             icon.setAttribute('fill', inWatchlist ? 'currentColor' : 'none');
         }
 
-        // Trade modal functions
         let currentTradeType = 'buy';
-        
+
         function openTradeModal(type = 'buy') {
             currentTradeType = type;
             const modal = document.getElementById('trade-modal');
-            
+
             document.getElementById('modal-title').textContent = `${type === 'buy' ? 'Buy' : 'Sell'} ${stockSymbol}`;
             document.getElementById('modal-subtitle').textContent = stockData?.name || stockSymbol;
             document.getElementById('modal-price').textContent = stockData ? '₹' + stockData.price.toLocaleString('en-IN', {minimumFractionDigits: 2}) : '--';
-            
+
             if (stockData) {
                 const change = stockData.price - stockData.prevClose;
                 const changePercent = (change / stockData.prevClose) * 100;
@@ -629,7 +492,7 @@
                 document.getElementById('modal-change').textContent = `${sign}${change.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)`;
                 document.getElementById('modal-change').className = `block text-sm ${isPositive ? 'text-emerald-400' : 'text-red-400'}`;
             }
-            
+
             document.getElementById('quantity-input').value = 1;
             setTradeType(type);
             updateOrderValue();
@@ -647,7 +510,7 @@
             const buyBtn = document.getElementById('btn-buy-toggle');
             const sellBtn = document.getElementById('btn-sell-toggle');
             const placeBtn = document.getElementById('btn-place-order');
-            
+
             if (type === 'buy') {
                 buyBtn.className = 'flex-1 py-3 rounded-lg font-semibold transition-all bg-emerald-500 text-white';
                 sellBtn.className = 'flex-1 py-3 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
@@ -690,19 +553,13 @@
             showToast(`${currentTradeType === 'buy' ? 'Bought' : 'Sold'} ${qty} shares of ${stockSymbol} for ₹${total.toLocaleString('en-IN', {minimumFractionDigits: 2})}`, 'success');
         }
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeTradeModal();
             if (e.key === 'b' && !document.getElementById('trade-modal').classList.contains('hidden') === false) openTradeModal('buy');
             if (e.key === 's' && !document.getElementById('trade-modal').classList.contains('hidden') === false) openTradeModal('sell');
         });
 
-        // Initialize
-        fetchStockData();
-        initChart('1m');
-        
-        // Auto-refresh price every 30 seconds
-        setInterval(fetchStockData, 30000);
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/chart.js"></script>
 </body>
 </html>

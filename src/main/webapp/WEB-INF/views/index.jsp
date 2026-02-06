@@ -1,104 +1,102 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Market - Learn Trading Without Risk</title>
-    <script src="tailwindcss.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <base href="<%= request.getContextPath() %>/">
+    <title>Paper Market - Practice Stock Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .gradient-text {
+            background: linear-gradient(to right, #10b981, #06b6d4, #10b981);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
         }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
+        .glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
         }
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        @keyframes fade-in-up {
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .fade-in-up-delay-1 { animation-delay: 0.1s; }
+        .fade-in-up-delay-2 { animation-delay: 0.2s; }
+        .fade-in-up-delay-3 { animation-delay: 0.3s; }
+        .fade-in-up-delay-4 { animation-delay: 0.4s; }
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .float { animation: float 6s ease-in-out infinite; }
-        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-        .gradient-text {
-            background: linear-gradient(135deg, #10b981, #34d399, #6ee7b7);
-            background-size: 200% 200%;
-            animation: gradient-shift 3s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
-        .ticker-wrap {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .ticker {
-            display: inline-block;
-            animation: ticker 30s linear infinite;
-        }
-        .fade-in-up {
-            animation: fade-in-up 0.8s ease-out forwards;
-        }
-        .fade-in-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
-        .fade-in-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
-        .fade-in-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
-        .fade-in-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
-        .glass {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
         }
     </style>
 </head>
 <body class="bg-slate-950 min-h-screen overflow-x-hidden">
     <!-- Animated Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl float"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl float" style="animation-delay: -3s;"></div>
-        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl float" style="animation-delay: -1.5s;"></div>
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl"></div>
     </div>
 
     <!-- Navigation -->
-    <nav class="relative z-10 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center pulse-glow">
-                    <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                    </svg>
+    <nav class="relative z-50 border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold text-white">Paper Market</span>
                 </div>
-                <span class="text-xl font-bold text-white">Paper Market</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="login.html" class="px-4 py-2 text-slate-300 hover:text-white transition-colors">Login</a>
-                <a href="register.html" class="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg transition-all hover:shadow-lg hover:shadow-emerald-500/25">
-                    Get Started
-                </a>
+                <div class="flex items-center space-x-4">
+                    <% if (session.getAttribute("user") != null) { %>
+                            <a href="holdings" class="px-4 py-2 text-slate-300 hover:text-white transition-colors">Dashboard</a>
+                            <a href="logout" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg transition-colors">Logout</a>
+                    <% } else { %>
+                            <a href="login" class="px-4 py-2 text-slate-300 hover:text-white transition-colors">Login</a>
+                            <a href="register" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg transition-colors">Get Started</a>
+                    <% } %>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Stock Ticker -->
-    <div class="relative z-10 border-y border-slate-800/50 bg-slate-900/30 py-3 mt-4">
-        <div class="ticker-wrap">
-            <div class="ticker">
+    <div class="relative z-10 bg-slate-900/50 border-b border-slate-800/50 py-3 overflow-hidden">
+        <div class="animate-scroll whitespace-nowrap inline-flex">
+            <div class="inline-flex items-center">
                 <span class="inline-flex items-center mx-8">
                     <span class="text-slate-400 mr-2">RELIANCE</span>
                     <span class="text-emerald-400 font-medium">₹2,456.30</span>
@@ -139,7 +137,8 @@
                     <span class="text-red-400 font-medium">₹812.90</span>
                     <span class="text-red-400 text-sm ml-2">-0.4%</span>
                 </span>
-                <!-- Duplicate for seamless loop -->
+            </div>
+            <div class="inline-flex items-center">
                 <span class="inline-flex items-center mx-8">
                     <span class="text-slate-400 mr-2">RELIANCE</span>
                     <span class="text-emerald-400 font-medium">₹2,456.30</span>
@@ -207,13 +206,13 @@
                     </p>
                     
                     <div class="fade-in-up fade-in-up-delay-4 flex flex-col sm:flex-row gap-4">
-                        <a href="register.html" class="group inline-flex items-center justify-center px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all hover:shadow-2xl hover:shadow-emerald-500/25 hover:scale-105">
+                        <a href="register" class="group inline-flex items-center justify-center px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all hover:shadow-2xl hover:shadow-emerald-500/25 hover:scale-105">
                             Start Trading Free
                             <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
                         </a>
-                        <a href="market.html" class="inline-flex items-center justify-center px-8 py-4 glass text-white font-semibold rounded-xl hover:bg-slate-800/50 transition-all">
+                        <a href="market" class="inline-flex items-center justify-center px-8 py-4 glass text-white font-semibold rounded-xl hover:bg-slate-800/50 transition-all">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -249,7 +248,6 @@
                 <!-- Right Content - Dashboard Preview -->
                 <div class="relative">
                     <div class="glass rounded-2xl p-6 card-hover">
-                        <!-- Mini Dashboard -->
                         <div class="flex items-center justify-between mb-6">
                             <div>
                                 <p class="text-slate-400 text-sm">Portfolio Value</p>
@@ -261,7 +259,6 @@
                             </div>
                         </div>
 
-                        <!-- Chart Placeholder -->
                         <div class="h-48 bg-slate-800/50 rounded-xl mb-6 flex items-end justify-around px-4 pb-4">
                             <div class="w-8 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-lg" style="height: 40%;"></div>
                             <div class="w-8 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-lg" style="height: 60%;"></div>
@@ -272,7 +269,6 @@
                             <div class="w-8 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-lg" style="height: 95%;"></div>
                         </div>
 
-                        <!-- Top Holdings -->
                         <div class="space-y-3">
                             <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                                 <div class="flex items-center gap-3">
@@ -322,7 +318,6 @@
                         </div>
                     </div>
 
-                    <!-- Floating Elements -->
                     <div class="absolute -top-4 -right-4 glass rounded-xl p-4 float" style="animation-delay: -2s;">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
@@ -364,7 +359,6 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,7 +369,6 @@
                     <p class="text-slate-400">Start with ₹10,00,000 virtual funds. Trade freely without any real financial risk.</p>
                 </div>
 
-                <!-- Feature 2 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -386,7 +379,6 @@
                     <p class="text-slate-400">Access live prices for 2,296+ Indian stocks from NSE and BSE exchanges.</p>
                 </div>
 
-                <!-- Feature 3 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -397,7 +389,6 @@
                     <p class="text-slate-400">Track your performance with detailed P&L reports, charts, and insights.</p>
                 </div>
 
-                <!-- Feature 4 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-orange-500/10 border border-orange-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -408,7 +399,6 @@
                     <p class="text-slate-400">Buy and sell stocks instantly. No delays, no waiting for order fulfillment.</p>
                 </div>
 
-                <!-- Feature 5 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-pink-500/10 border border-pink-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -419,7 +409,6 @@
                     <p class="text-slate-400">Create your personalized watchlist to track your favorite stocks.</p>
                 </div>
 
-                <!-- Feature 6 -->
                 <div class="glass rounded-2xl p-8 card-hover">
                     <div class="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-7 h-7 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -437,7 +426,6 @@
     <section class="relative z-10 px-6 py-20">
         <div class="max-w-4xl mx-auto">
             <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-3xl p-12 text-center relative overflow-hidden">
-                <!-- Background Pattern -->
                 <div class="absolute inset-0 opacity-10">
                     <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
                 </div>
@@ -445,7 +433,7 @@
                 <div class="relative">
                     <h2 class="text-4xl font-bold text-white mb-4">Ready to Start Your Trading Journey?</h2>
                     <p class="text-xl text-emerald-100 mb-8">Join thousands of traders learning to invest wisely</p>
-                    <a href="register.html" class="inline-flex items-center px-8 py-4 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-all hover:shadow-2xl hover:scale-105">
+                    <a href="register" class="inline-flex items-center px-8 py-4 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-all hover:shadow-2xl hover:scale-105">
                         Create Free Account
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>

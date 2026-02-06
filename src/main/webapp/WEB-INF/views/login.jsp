@@ -1,11 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="<%= request.getContextPath() %>/">
     <title>Login - Paper Market</title>
-    <script src="tailwindcss.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -14,10 +15,6 @@
         @keyframes pulse-glow {
             0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
             50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); }
-        }
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -30,10 +27,6 @@
         .animate-float { animation: float 6s ease-in-out infinite; }
         .animate-float-delay { animation: float 6s ease-in-out infinite; animation-delay: -3s; }
         .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-        .animate-gradient { 
-            background-size: 200% 200%;
-            animation: gradient-shift 8s ease infinite;
-        }
         .animate-slideUp { animation: slideUp 0.6s ease-out forwards; }
         .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
         .glass-card {
@@ -86,29 +79,60 @@
     <div class="w-full max-w-md relative z-10">
         <!-- Logo & Title -->
         <div class="text-center mb-8 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl mb-4 animate-pulse-glow">
+            <a href="./" class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl mb-4 animate-pulse-glow">
                 <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                 </svg>
-            </div>
+            </a>
             <h1 class="text-4xl font-bold bg-gradient-to-r from-slate-100 via-emerald-200 to-slate-100 bg-clip-text text-transparent mb-2">Paper Market</h1>
             <p class="text-slate-400">Professional paper trading platform</p>
         </div>
+
+        <!-- Flash Messages -->
+        <% if (request.getAttribute("error") != null) { %>
+            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm animate-slideUp">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>${error}</span>
+                </div>
+            </div>
+        <% } %>
+        
+        <% if (request.getAttribute("success") != null) { %>
+            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm animate-slideUp">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>${success}</span>
+                </div>
+            </div>
+        <% } %>
 
         <!-- Login Card -->
         <div class="glass-card rounded-2xl p-8 shadow-2xl animate-slideUp" style="animation-delay: 0.2s; opacity: 0;">
             <h2 class="text-xl font-semibold text-slate-100 mb-6">Sign in to your account</h2>
             
             <!-- Login Form -->
-            <form class="space-y-5">
+            <form action="login" method="POST" class="space-y-5">
+                <!-- CSRF Token (if using Spring Security) -->
+                <% if (request.getAttribute("_csrf") != null) { %>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <% } %>
+                
                 <!-- Email Field -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email address</label>
                     <input 
                         type="email" 
                         id="email" 
+                        name="email"
+                        required
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="you@example.com"
+                        value="${param.email}"
                     >
                 </div>
 
@@ -119,6 +143,8 @@
                         <input 
                             type="password" 
                             id="password" 
+                            name="password"
+                            required
                             class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="••••••••"
                         >
@@ -134,10 +160,10 @@
                 <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between">
                     <label class="flex items-center cursor-pointer group">
-                        <input type="checkbox" class="w-4 h-4 rounded border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
                         <span class="ml-2 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Remember me</span>
                     </label>
-                    <a href="#" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium">Forgot password?</a>
+                    <a href="forgot-password" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium">Forgot password?</a>
                 </div>
 
                 <!-- Sign In Button -->
@@ -161,13 +187,13 @@
 
             <!-- Social Login Buttons -->
             <div class="grid grid-cols-2 gap-3">
-                <button class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                <button type="button" class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
                     </svg>
                     Google
                 </button>
-                <button class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                <button type="button" class="flex items-center justify-center px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
                     </svg>
@@ -178,7 +204,7 @@
             <!-- Sign Up Link -->
             <p class="text-center text-sm text-slate-400 mt-6">
                 Don't have an account? 
-                <a href="register.html" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign up</a>
+                <a href="register" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign up</a>
             </p>
         </div>
 
@@ -190,6 +216,11 @@
                 </svg>
                 <span>Secured with 256-bit encryption</span>
             </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-sm text-slate-500">
+            <p>&copy; 2026 Paper Market. All rights reserved.</p>
         </div>
     </div>
 
@@ -206,11 +237,5 @@
             }
         }
     </script>
-</body>
-</html>        <!-- Footer -->
-        <div class="text-center mt-8 text-sm text-slate-500">
-            <p>&copy; 2026 Paper Market. All rights reserved.</p>
-        </div>
-    </div>
 </body>
 </html>

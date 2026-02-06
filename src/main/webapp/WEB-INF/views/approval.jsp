@@ -1,10 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Approval - Paper Market</title>
-    <script src="tailwindcss.js"></script>
+    <jsp:include page="/WEB-INF/views/common/head.jsp">
+        <jsp:param name="title" value="Pending Approval"/>
+    </jsp:include>
 </head>
 <body class="bg-slate-950 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-2xl w-full">
@@ -103,7 +103,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="login.html" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold rounded-lg transition-colors flex items-center justify-center">
+                <a href="login" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold rounded-lg transition-colors flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                     </svg>
@@ -132,11 +132,6 @@
         </div>
     </div>
 
-    <script>
-        function checkStatus() {
-            // In a real application, this would check the actual status from the server
-            alert('Your account is still pending approval. You will be notified via email once approved.');
-        }
-    </script>
+    <script src="js/approval.js"></script>
 </body>
 </html>

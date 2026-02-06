@@ -1,11 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="<%= request.getContextPath() %>/">
     <title>Register - Paper Market</title>
-    <script src="tailwindcss.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -22,10 +23,6 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        @keyframes checkmark {
-            0% { stroke-dashoffset: 50; }
-            100% { stroke-dashoffset: 0; }
         }
         .animate-float { animation: float 6s ease-in-out infinite; }
         .animate-float-delay { animation: float 6s ease-in-out infinite; animation-delay: -3s; }
@@ -75,17 +72,6 @@
         .photo-upload-area.has-image {
             border-color: rgba(16, 185, 129, 0.5);
         }
-        .step-indicator {
-            transition: all 0.3s ease;
-        }
-        .step-indicator.active {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
-            border-color: rgba(16, 185, 129, 0.5);
-        }
-        .step-indicator.completed {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: rgba(16, 185, 129, 0.5);
-        }
         .password-strength {
             height: 4px;
             border-radius: 2px;
@@ -108,37 +94,51 @@
     <div class="w-full max-w-2xl my-8 relative z-10">
         <!-- Logo & Title -->
         <div class="text-center mb-8 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl mb-4 animate-pulse-glow">
+            <a href="./" class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl mb-4 animate-pulse-glow">
                 <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                 </svg>
-            </div>
+            </a>
             <h1 class="text-4xl font-bold bg-gradient-to-r from-slate-100 via-emerald-200 to-slate-100 bg-clip-text text-transparent mb-2">Paper Market</h1>
             <p class="text-slate-400">Start your paper trading journey today</p>
         </div>
+
+        <!-- Flash Messages -->
+        <% if (request.getAttribute("error") != null) { %>
+            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm animate-slideUp">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>${error}</span>
+                </div>
+            </div>
+        <% } %>
 
         <!-- Register Card -->
         <div class="glass-card rounded-2xl p-8 shadow-2xl animate-slideUp" style="animation-delay: 0.2s; opacity: 0;">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-semibold text-slate-100">Create your account</h2>
-                <!-- Step Indicators -->
-                <div class="flex items-center space-x-2">
-                    <div class="step-indicator active w-8 h-2 rounded-full border border-slate-700 bg-emerald-500/20"></div>
-                    <div class="step-indicator w-8 h-2 rounded-full border border-slate-700 bg-slate-800/50"></div>
-                </div>
             </div>
             
             <!-- Register Form -->
-            <form class="space-y-5" onsubmit="handleRegistration(event)">
+            <form action="register" method="POST" enctype="multipart/form-data" class="space-y-5" id="registerForm">
+                <!-- CSRF Token (if using Spring Security) -->
+                <% if (request.getAttribute("_csrf") != null) { %>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <% } %>
+                
                 <!-- Full Name Field -->
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-slate-300 mb-2">Full Name *</label>
                     <input 
                         type="text" 
                         id="fullName" 
+                        name="fullName"
                         required
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="John Doe"
+                        value="${param.fullName}"
                     >
                 </div>
 
@@ -148,9 +148,11 @@
                     <input 
                         type="email" 
                         id="email" 
+                        name="email"
                         required
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="you@example.com"
+                        value="${param.email}"
                     >
                 </div>
 
@@ -162,10 +164,12 @@
                         <input 
                             type="tel" 
                             id="phone" 
+                            name="phone"
                             required
                             pattern="[0-9]{10}"
                             class="w-full pl-14 pr-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="9876543210"
+                            value="${param.phone}"
                         >
                     </div>
                     <p class="text-xs text-slate-500 mt-1.5">Enter 10-digit mobile number</p>
@@ -178,6 +182,7 @@
                         <input 
                             type="password" 
                             id="password" 
+                            name="password"
                             required
                             minlength="8"
                             oninput="checkPasswordStrength(this.value)"
@@ -203,18 +208,42 @@
                     </div>
                 </div>
 
+                <!-- Confirm Password Field -->
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-slate-300 mb-2">Confirm Password *</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword"
+                            required
+                            minlength="8"
+                            class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
+                            placeholder="••••••••"
+                        >
+                        <button type="button" onclick="togglePassword('confirmPassword')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                            <svg class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- PAN Card Number -->
                 <div>
                     <label for="panCard" class="block text-sm font-medium text-slate-300 mb-2">PAN Card Number *</label>
                     <input 
                         type="text" 
                         id="panCard" 
+                        name="panCard"
                         required
                         pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
                         maxlength="10"
                         oninput="this.value = this.value.toUpperCase()"
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 uppercase focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300 tracking-wider font-mono" 
                         placeholder="ABCDE1234F"
+                        value="${param.panCard}"
                     >
                     <p class="text-xs text-slate-500 mt-1.5">Format: ABCDE1234F</p>
                 </div>
@@ -223,13 +252,11 @@
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-2">Profile Photo *</label>
                     <div class="flex items-center space-x-4">
-                        <!-- Preview -->
                         <div id="photoPreview" class="photo-upload-area w-24 h-24 bg-slate-950/50 border-2 border-dashed border-slate-600 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 cursor-pointer" onclick="document.getElementById('photo').click()">
                             <svg id="photoPlaceholder" class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
-                        <!-- Upload Button -->
                         <div class="flex-1">
                             <label for="photo" class="cursor-pointer inline-block">
                                 <div class="px-5 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600 rounded-xl text-slate-100 text-sm font-medium transition-all duration-300 inline-flex items-center space-x-2 hover:scale-[1.02] active:scale-[0.98]">
@@ -242,6 +269,7 @@
                             <input 
                                 type="file" 
                                 id="photo" 
+                                name="photo"
                                 required
                                 accept="image/*"
                                 class="hidden"
@@ -255,7 +283,7 @@
                 <!-- Terms & Conditions -->
                 <div class="pt-2">
                     <label class="flex items-start cursor-pointer group">
-                        <input type="checkbox" required class="w-5 h-5 mt-0.5 rounded-md border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
+                        <input type="checkbox" name="terms" required class="w-5 h-5 mt-0.5 rounded-md border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
                         <span class="ml-3 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
                             I agree to the <a href="#" class="text-emerald-400 hover:text-emerald-300 font-medium">Terms of Service</a> and 
                             <a href="#" class="text-emerald-400 hover:text-emerald-300 font-medium">Privacy Policy</a>
@@ -275,7 +303,7 @@
             <!-- Sign In Link -->
             <p class="text-center text-sm text-slate-400 mt-6">
                 Already have an account? 
-                <a href="login.html" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign in</a>
+                <a href="login" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign in</a>
             </p>
         </div>
 
@@ -290,55 +318,29 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-emerald-500/30 rounded-2xl max-w-md w-full p-8 text-center">
-            <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-slate-100 mb-2">Registration Submitted!</h3>
-            <p class="text-slate-400 mb-6">Your account has been created successfully. Please wait for admin approval to access your account.</p>
-            <a href="approval.html" class="inline-block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                View Status
-            </a>
-        </div>
-    </div>
-
     <script>
-        let uploadedPhoto = null;
-
         function handlePhotoUpload(event) {
             const file = event.target.files[0];
             if (file) {
-                // Validate file size (2MB max)
                 if (file.size > 2 * 1024 * 1024) {
                     alert('File size must be less than 2MB');
                     event.target.value = '';
                     return;
                 }
-
-                // Validate file type
                 if (!file.type.startsWith('image/')) {
                     alert('Please upload an image file');
                     event.target.value = '';
                     return;
                 }
-
-                // Show preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('photoPreview');
                     const placeholder = document.getElementById('photoPlaceholder');
                     if (placeholder) placeholder.style.display = 'none';
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">`;
+                    preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" class="w-full h-full object-cover">';
                     preview.classList.add('has-image');
-                    uploadedPhoto = e.target.result;
                 };
                 reader.readAsDataURL(file);
-
-                // Update label with checkmark
                 document.getElementById('photoLabel').innerHTML = '<svg class="w-4 h-4 mr-1 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' + file.name.substring(0, 15) + (file.name.length > 15 ? '...' : '');
             }
         }
@@ -380,48 +382,32 @@
             strengthText.className = 'text-xs mt-1.5 ' + textColors[score];
         }
 
-        function handleRegistration(event) {
-            event.preventDefault();
-            
-            // Get form values
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             const password = document.getElementById('password').value;
-            const panCard = document.getElementById('panCard').value.toUpperCase();
+            const confirmPassword = document.getElementById('confirmPassword').value;
             
-            // Validate PAN card format
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            const panCard = document.getElementById('panCard').value.toUpperCase();
             const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
             if (!panRegex.test(panCard)) {
+                e.preventDefault();
                 alert('Invalid PAN card format. Please use format: ABCDE1234F');
-                return;
+                return false;
             }
             
-            // Validate phone number
+            const phone = document.getElementById('phone').value;
             if (phone.length !== 10) {
+                e.preventDefault();
                 alert('Please enter a valid 10-digit phone number');
-                return;
+                return false;
             }
-
-            // Check if photo is uploaded
-            if (!uploadedPhoto) {
-                alert('Please upload a profile photo');
-                return;
-            }
-            
-            // Store user data (in real app, this would go to backend)
-            const userData = {
-                fullName,
-                email,
-                phone,
-                panCard,
-                photo: uploadedPhoto,
-                registeredAt: new Date().toISOString(),
-                status: 'pending'
-            };
-            
-            localStorage.setItem('paperMarketUser', JSON.stringify(userData));
-            
-            // Show success modal
-            document.getElementById('successModal').classList.remove('hidden');
-        }
+        });
+    </script>
+</body>
+</html>

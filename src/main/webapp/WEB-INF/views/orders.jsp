@@ -1,174 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders - Paper Market</title>
-    <script src="tailwindcss.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes pulse-subtle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
-        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
-        .animate-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-        }
-        .stat-card {
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, currentColor, transparent);
-            opacity: 0.3;
-        }
-        .stat-card.emerald::before { color: rgb(16, 185, 129); }
-        .stat-card.rose::before { color: rgb(244, 63, 94); }
-        .stat-card.cyan::before { color: rgb(6, 182, 212); }
-        .stat-card.purple::before { color: rgb(168, 85, 247); }
-        .table-row-animate {
-            animation: slideUp 0.4s ease-out forwards;
-            opacity: 0;
-        }
-        .nav-item {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 60%;
-            background: rgb(16, 185, 129);
-            border-radius: 0 4px 4px 0;
-        }
-        .sidebar-glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .export-btn {
-            position: relative;
-            overflow: hidden;
-        }
-        .export-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            transition: left 0.5s;
-        }
-        .export-btn:hover::after {
-            left: 150%;
-        }
-    </style>
+    <jsp:include page="/WEB-INF/views/common/head.jsp">
+        <jsp:param name="title" value="Orders"/>
+    </jsp:include>
+    <link rel="stylesheet" href="css/orders.css">
 </head>
 <body class="bg-slate-950 min-h-screen">
     <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900/80 backdrop-blur-xl border-r border-slate-800/50 flex flex-col relative overflow-hidden">
-            <!-- Ambient Glow -->
-            <div class="sidebar-glow -top-20 -left-20"></div>
-            
-            <!-- Logo -->
-            <div class="p-6 border-b border-slate-800/50">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">Paper Market</span>
-                </div>
-            </div>
+        <jsp:include page="/WEB-INF/views/common/sidebar.jsp">
+            <jsp:param name="activePage" value="orders"/>
+        </jsp:include>
 
-            <!-- Navigation -->
-            <nav class="flex-1 p-4 space-y-1">
-                <a href="holdings.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                    <span>Holdings</span>
-                </a>
-
-                <a href="market.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                    </svg>
-                    <span>Market</span>
-                </a>
-
-                <a href="funds.html" class="nav-item flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 rounded-xl transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                    <span>Funds</span>
-                </a>
-
-                <a href="orders.html" class="nav-item active flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-medium">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    <span>Orders</span>
-                </a>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="p-4 border-t border-slate-800/50">
-                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
-                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
-                        <span class="text-sm font-bold text-white">JD</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-slate-100">John Doe</p>
-                        <p class="text-xs text-slate-500">john@example.com</p>
-                    </div>
-                    <svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
         <main class="flex-1 overflow-auto">
-            <!-- Top Header -->
             <header class="glass-card border-b border-slate-800/50 px-8 py-5 sticky top-0 z-10">
                 <div class="flex items-center justify-between">
                     <div class="animate-fadeIn">
@@ -176,14 +21,12 @@
                         <p class="text-sm text-slate-400 mt-1">Track all your executed trades</p>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <!-- Filter Dropdown -->
                         <select class="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 text-sm focus:outline-none focus:border-emerald-500/50 transition-colors cursor-pointer">
                             <option>All Trades</option>
                             <option>Buy Orders</option>
                             <option>Sell Orders</option>
                         </select>
 
-                        <!-- Date Range -->
                         <select class="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-300 text-sm focus:outline-none focus:border-emerald-500/50 transition-colors cursor-pointer">
                             <option>Last 7 Days</option>
                             <option>Last 30 Days</option>
@@ -191,7 +34,6 @@
                             <option>Last Year</option>
                         </select>
 
-                        <!-- Export Button -->
                         <button class="export-btn flex items-center space-x-2 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-all duration-300">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -202,9 +44,7 @@
                 </div>
             </header>
 
-            <!-- Trade History Content -->
             <div class="p-8">
-                <!-- Summary Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="stat-card purple glass-card rounded-2xl p-6 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
                         <div class="flex items-center justify-between mb-3">
@@ -256,7 +96,6 @@
                     </div>
                 </div>
 
-                <!-- Trades Table -->
                 <div class="glass-card rounded-2xl overflow-hidden animate-slideUp" style="animation-delay: 0.5s; opacity: 0;">
                     <div class="px-6 py-5 border-b border-slate-800/50 flex items-center justify-between">
                         <div>
@@ -284,7 +123,6 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/30">
-                                <!-- Trade Row 1 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.6s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -326,7 +164,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Trade Row 2 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.7s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -368,7 +205,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Trade Row 3 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.8s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -410,7 +246,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Trade Row 4 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 0.9s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -452,7 +287,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Trade Row 5 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 1s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -494,7 +328,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Trade Row 6 -->
                                 <tr class="table-row-animate hover:bg-slate-800/30 transition-all duration-300 cursor-pointer group" style="animation-delay: 1.1s;">
                                     <td class="px-6 py-4">
                                         <div>
@@ -538,8 +371,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
-                    <!-- Pagination -->
+
                     <div class="px-6 py-4 border-t border-slate-800/50 flex items-center justify-between">
                         <p class="text-sm text-slate-500">Showing <span class="text-slate-300 font-medium">1-6</span> of <span class="text-slate-300 font-medium">24</span> trades</p>
                         <div class="flex items-center space-x-2">
@@ -559,6 +391,7 @@
                             </button>
                         </div>
                     </div>
+                </div>
             </div>
         </main>
     </div>
