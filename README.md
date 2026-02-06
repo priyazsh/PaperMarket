@@ -1,10 +1,13 @@
-## Module
 
-### Admin
+## TODO
+
+### Modules
+
+#### Admin
   - Stock Listing
   - Approve Registeration
 
-### Customer 
+#### Customer 
   - Register 
   - Login
   - Stocks (Buy/Sell)
