@@ -54,7 +54,7 @@
                             <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
                         </div>
                         <div class="font-mono text-sm">
-                            <p class="text-slate-500">$ curl papermarket.com<span class="text-slate-400">/this-page</span></p>
+                            <p class="text-slate-500">$ curl papermarket.is-a.software<span class="text-slate-400">/this-page</span></p>
                             <p class="text-rose-400 mt-1">Error: 404 NOT_FOUND</p>
                             <p class="text-slate-500 mt-1">$ <span class="cursor-blink text-emerald-400">█</span></p>
                         </div>

@@ -31,6 +31,8 @@ public class userDaoImpl implements userDao {
 		this.session = session;
 	}
 
+//--------------------------------------------------------------------------
+	//create user Register
 	@Override
 	public boolean createUser(User user) {
 		try {
@@ -43,26 +45,31 @@ public class userDaoImpl implements userDao {
 		}
 
 	}
-
+//------------------------------------------------------------------------
+	
+	//Login user
 	@Override
-	public List<User> listAll() {
-		List<User> lst = session.getCurrentSession().createQuery("From User", User.class).list();
-		if (lst != null) {
-			return lst;
-		} else {
+	public User checkuserCredential(String email, String password) {
+		userStatus status = userStatus.PENDING;
+		org.hibernate.Session se = session.getCurrentSession();
 
+		String hql = "from User u where u.email = :email and u.password = :password and u.status = :status";
+
+		Query<User> query = se.createQuery(hql, User.class);
+		query.setParameter("email", email);
+		query.setParameter("password", password);
+		query.setParameter("status", status);
+
+		User result = query.uniqueResult();
+		if (result != null) {
+			return result;
+		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public List<User> FindUserByStatus(userStatus status) {
-		String query = "from User where status=:status";
-		return session.getCurrentSession().createQuery("from users where status=:status", User.class)
-				.setParameter("status", status).getResultList();
 
 	}
 
+//-----------------------------------------------------------------------------------
 	@Override
 	public void sendEmail(String email) {
 
@@ -99,27 +106,34 @@ public class userDaoImpl implements userDao {
 
 	}
 
-	
+//-----------------------------------------------------------------
+	//find all user
 	@Override
-	public User checkuserCredential(String email, String password) {
-		userStatus status = userStatus.PENDING;
-		org.hibernate.Session se = session.getCurrentSession();
+	public List<User> listAll() {
+		List<User> lst = session.getCurrentSession().createQuery("From User", User.class).list();
+		if (lst != null) {
+			return lst;
+		} else {
 
-		String hql = "from User u where u.email = :email and u.password = :password and u.status = :status";
-
-		Query<User> query = se.createQuery(hql, User.class);
-		query.setParameter("email", email);
-		query.setParameter("password", password);
-		query.setParameter("status", status);
-
-		User result = query.uniqueResult();
-		if(result!=null) {
-			return result;
-		}
-		else {
 			return null;
 		}
-		
 	}
+//-------------------------------------------------------------------------------
+	
+	//find user  by status
+	@Override
+	public List<User> FindUserByStatus(userStatus status) {
+
+	    String hql = "from User where status = :status";
+
+	    return session.getCurrentSession()
+	                  .createQuery(hql, User.class)
+	                  .setParameter("status", status)
+	                  .getResultList();
+	}
+	
+//--------------------------------------------------------------------------------
+	
+	
 
 }

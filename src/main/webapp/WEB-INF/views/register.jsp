@@ -142,17 +142,42 @@
                     >
                 </div>
 
-                <!-- Email Field -->
+                <!-- Email Field + OTP -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email Address *</label>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            required
+                            class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
+                            placeholder="you@example.com"
+                            value="${param.email}"
+                        >
+                        <button 
+                            type="button" 
+                            id="sendOtpBtn"
+                            class="btn-shine px-5 py-3.5 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-600 rounded-xl text-slate-100 text-sm font-semibold transition-all duration-300 whitespace-nowrap"
+                        >
+                            Send OTP
+                        </button>
+                    </div>
+                    <p id="otpHint" class="text-xs text-slate-500 mt-2 hidden">OTP sent. Please check your inbox.</p>
+                </div>
+
+                <!-- OTP Box (Hidden until Send OTP) -->
+                <div id="otpBox" class="hidden">
+                    <label for="otp" class="block text-sm font-medium text-slate-300 mb-2">Enter OTP *</label>
                     <input 
-                        type="email" 
-                        id="email" 
-                        name="email"
-                        required
-                        class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
-                        placeholder="you@example.com"
-                        value="${param.email}"
+                        type="text" 
+                        id="otp" 
+                        name="otp"
+                        inputmode="numeric"
+                        pattern="[0-9]{4,6}"
+                        maxlength="6"
+                        class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300 tracking-widest"
+                        placeholder="Enter 4-6 digit OTP"
                     >
                 </div>
 
@@ -381,6 +406,28 @@
             strengthText.textContent = texts[score];
             strengthText.className = 'text-xs mt-1.5 ' + textColors[score];
         }
+
+        const emailInput = document.getElementById('email');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+        const otpBox = document.getElementById('otpBox');
+        const otpHint = document.getElementById('otpHint');
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        sendOtpBtn.addEventListener('click', function() {
+            const email = emailInput.value.trim();
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address before sending OTP.');
+                emailInput.focus();
+                return;
+            }
+            otpBox.classList.remove('hidden');
+            otpHint.classList.remove('hidden');
+            const otpInput = document.getElementById('otp');
+            if (otpInput) otpInput.focus();
+        });
 
         // Form validation
         document.getElementById('registerForm').addEventListener('submit', function(e) {

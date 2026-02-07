@@ -1,8 +1,13 @@
 package in.cs.pojo;
 
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import in.cs.EnumClass.userStatus;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,12 +30,19 @@ public class User {
 	@Transient
 	private String confirmPassword;
 	private String panCard;
+	@CreationTimestamp
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 	private String photo;
 	@Enumerated(EnumType.STRING)
 	@Nonnull
 	private userStatus status;
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public User(int id, String name, String email, String phone, String password, String confirmPassword,
-			String panCard, String photo, userStatus status) {
+			String panCard, LocalDateTime createdAt, String photo, userStatus status) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -39,13 +51,12 @@ public class User {
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.panCard = panCard;
+		this.createdAt = createdAt;
 		this.photo = photo;
 		this.status = status;
 	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -88,6 +99,12 @@ public class User {
 	public void setPanCard(String panCard) {
 		this.panCard = panCard;
 	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 	public String getPhoto() {
 		return photo;
 	}
@@ -103,8 +120,8 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", password=" + password
-				+ ", confirmPassword=" + confirmPassword + ", panCard=" + panCard + ", photo=" + photo + ", status="
-				+ status + "]";
+				+ ", confirmPassword=" + confirmPassword + ", panCard=" + panCard + ", createdAt=" + createdAt
+				+ ", photo=" + photo + ", status=" + status + "]";
 	}
 	
 	

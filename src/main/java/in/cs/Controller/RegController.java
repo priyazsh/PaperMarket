@@ -1,11 +1,13 @@
 package in.cs.Controller;
 
 import java.io.File;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,13 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import in.cs.EnumClass.userStatus;
 import in.cs.dao.userDao;
+import in.cs.daoimpl.userDaoImpl;
 import in.cs.pojo.User;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
 @Controller
 public class RegController {
+
 
 
 
@@ -80,7 +83,12 @@ public class RegController {
 		
 		if(credential!=null) {
 			String name = credential.getName();
-			mvc=new ModelAndView("market","msg",name);
+			String photo = credential.getPhoto();
+			mvc=new ModelAndView("market");
+			mvc.addObject("name",name);
+			mvc.addObject("Dp", photo);
+			
+			
 		}
 		else {
 			mvc=new ModelAndView("login","msg","wrong email or password");
@@ -88,5 +96,34 @@ public class RegController {
 		
 		return mvc;
 		
+	}
+	
+	
+	@GetMapping("/allData")
+	public String getAllData(Model model) {
+		List<User> users = userdaoimpl.listAll();
+		model.addAttribute("users", users);
+		return "admin";
+	}
+	
+	@GetMapping("/approvedUser")
+	public String filterStatusData(Model model) {
+		List<User> approvedUser = userdaoimpl.FindUserByStatus(userStatus.APPROVED);
+	     model.addAttribute("users", approvedUser);
+		return "admin";
+	}
+	
+	@GetMapping("/pendingUser")
+	public String findPendingUser(Model model) {
+		List<User> approvedUser = userdaoimpl.FindUserByStatus(userStatus.PENDING);
+	     model.addAttribute("users", approvedUser);
+		return "admin";
+	}
+	
+	@GetMapping("/rejectUser")
+	public String findRejectUser(Model model) {
+		List<User> approvedUser = userdaoimpl.FindUserByStatus(userStatus.CANCLED);
+	     model.addAttribute("users", approvedUser);
+		return "admin";
 	}
 }

@@ -81,6 +81,12 @@ public class OpenPagesController {
 	public String openAbout() {
 		return "index";
 	}
+	
+	@GetMapping("/admin/stocks")
+	public String openAdminStocks() {
+		return "stocks";
+	}
+
 
 	@GetMapping("/terms")
 	public String openTerms() {
