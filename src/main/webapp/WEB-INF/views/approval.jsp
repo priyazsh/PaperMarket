@@ -27,9 +27,13 @@
                 </svg>
             </div>
 
+<%String wait=(String)request.getAttribute("msg");
+if(wait!=null){
+%>
+
             <!-- Title -->
-            <h2 class="text-3xl font-bold text-slate-100 mb-4">Account Pending Approval</h2>
-            
+            <h2 class="text-3xl font-bold text-slate-100 mb-4"><%=wait %></h2>
+            <%} %>
             <!-- Description -->
             <p class="text-lg text-slate-300 mb-6">
                 Thank you for registering with Paper Market!

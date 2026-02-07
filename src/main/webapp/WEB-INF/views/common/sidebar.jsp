@@ -54,29 +54,24 @@
 
     <!-- User Profile -->
     <div class="p-4 border-t border-slate-800/50">
-        <% if (session.getAttribute("user") != null) { %>
-                <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
-                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
-                        <span class="text-sm font-bold text-white">${sessionScope.user.initials}</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-slate-100">${sessionScope.user.fullName}</p>
-                        <p class="text-xs text-slate-500">${sessionScope.user.email}</p>
-                    </div>
-                    <a href="logout" class="text-slate-500 hover:text-rose-400 transition-colors" title="Logout">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                    </a>
-                </div>
-        <% } else { %>
-                <a href="login" class="flex items-center justify-center space-x-2 px-4 py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl hover:bg-emerald-500/20 transition-all duration-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                    </svg>
-                    <span class="font-medium">Sign In</span>
-                </a>
-        <% } %>
+        <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
+            <!-- Profile Picture -->
+            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-slate-100 truncate">My Account</p>
+                <p class="text-xs text-slate-500">Trader</p>
+            </div>
+            <!-- Logout Button -->
+            <a href="logout" class="p-2 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all duration-300" title="Logout">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+            </a>
+        </div>
     </div>
 </aside>
 

@@ -134,7 +134,7 @@
                     <input 
                         type="text" 
                         id="fullName" 
-                        name="fullName"
+                        name="name"
                         required
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="John Doe"

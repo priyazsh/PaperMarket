@@ -114,13 +114,14 @@
         <!-- Login Card -->
         <div class="glass-card rounded-2xl p-8 shadow-2xl animate-slideUp" style="animation-delay: 0.2s; opacity: 0;">
             <h2 class="text-xl font-semibold text-slate-100 mb-6">Sign in to your account</h2>
-            
+            <%String msg=(String)request.getAttribute("msg");
+            if(msg!=null){
+            %>
+            <h2 class="text-xl font-semibold text-slate-100 mb-6" style="color:red;"><%=msg %></h2>
+            <%} %>
             <!-- Login Form -->
-            <form action="login" method="POST" class="space-y-5">
-                <!-- CSRF Token (if using Spring Security) -->
-                <% if (request.getAttribute("_csrf") != null) { %>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <% } %>
+            <form action="userLogin" method="POST" class="space-y-5">
+           
                 
                 <!-- Email Field -->
                 <div>
@@ -148,7 +149,7 @@
                             class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="••••••••"
                         >
-                        <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                        <button type="button" onclick="event.preventDefault(); togglePassword();"  class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
                             <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>

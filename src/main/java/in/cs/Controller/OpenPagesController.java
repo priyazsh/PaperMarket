@@ -3,12 +3,10 @@ package in.cs.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 public class OpenPagesController {
-
-	// ========================
-	// Home / Landing
-	// ========================
+	
 	
 	@GetMapping("/")
 	public String root() {
@@ -20,9 +18,6 @@ public class OpenPagesController {
 		return "index";
 	}
 
-	// ========================
-	// Auth Pages
-	// ========================
 
 	@GetMapping("/login")
 	public String openLogin() {
@@ -50,10 +45,6 @@ public class OpenPagesController {
 		return "approval";
 	}
 
-	// ========================
-	// Dashboard Pages
-	// ========================
-
 	@GetMapping("/holdings")
 	public String openHoldings() {
 		return "holdings";
@@ -79,18 +70,12 @@ public class OpenPagesController {
 		return "orders";
 	}
 
-	// ========================
-	// Admin
-	// ========================
 
 	@GetMapping("/admin")
 	public String openAdmin() {
 		return "admin";
 	}
 
-	// ========================
-	// Footer / Info Pages
-	// ========================
 
 	@GetMapping("/about")
 	public String openAbout() {

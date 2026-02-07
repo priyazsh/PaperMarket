@@ -27,22 +27,22 @@
 
             <!-- Navigation -->
             <nav class="flex-1 p-4 space-y-1">
-                <a href="#" onclick="showSection('pending')" class="flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium">
+                <a href="${pageContext.request.contextPath}/admin?status=pending" class="flex items-center space-x-3 px-4 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span>Pending Approvals</span>
-                    <span id="pending-count" class="ml-auto bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                    <span class="ml-auto bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">${pendingCount}</span>
                 </a>
 
-                <a href="#" onclick="showSection('approved')" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                <a href="${pageContext.request.contextPath}/admin?status=approved" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span>Approved Accounts</span>
                 </a>
 
-                <a href="#" onclick="showSection('rejected')" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
+                <a href="${pageContext.request.contextPath}/admin?status=rejected" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -61,12 +61,12 @@
                         <p class="text-xs text-slate-500">admin@papermarket.com</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-full mt-3 px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-100 text-sm rounded-lg transition-colors flex items-center justify-center">
+                <a href="${pageContext.request.contextPath}/logout" class="w-full mt-3 px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-100 text-sm rounded-lg transition-colors flex items-center justify-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
                     Logout
-                </button>
+                </a>
             </div>
         </aside>
 
@@ -85,19 +85,19 @@
                 <div class="grid grid-cols-4 gap-4">
                     <div class="bg-slate-950 border border-slate-800 rounded-lg p-4">
                         <p class="text-xs text-slate-500 mb-1">Total Users</p>
-                        <p class="text-2xl font-bold text-slate-100" id="total-users">0</p>
+                        <p class="text-2xl font-bold text-slate-100">${totalUsers}</p>
                     </div>
                     <div class="bg-slate-950 border border-amber-500/20 rounded-lg p-4">
                         <p class="text-xs text-amber-500 mb-1">Pending</p>
-                        <p class="text-2xl font-bold text-amber-500" id="stat-pending">0</p>
+                        <p class="text-2xl font-bold text-amber-500">${pendingCount}</p>
                     </div>
                     <div class="bg-slate-950 border border-emerald-500/20 rounded-lg p-4">
                         <p class="text-xs text-emerald-500 mb-1">Approved</p>
-                        <p class="text-2xl font-bold text-emerald-500" id="stat-approved">0</p>
+                        <p class="text-2xl font-bold text-emerald-500">${approvedCount}</p>
                     </div>
                     <div class="bg-slate-950 border border-rose-500/20 rounded-lg p-4">
                         <p class="text-xs text-rose-500 mb-1">Rejected</p>
-                        <p class="text-2xl font-bold text-rose-500" id="stat-rejected">0</p>
+                        <p class="text-2xl font-bold text-rose-500">${rejectedCount}</p>
                     </div>
                 </div>
             </header>
@@ -105,24 +105,25 @@
             <!-- Content -->
             <div class="p-8">
                 <!-- Search and Filters -->
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
+                <form action="${pageContext.request.contextPath}/admin" method="get" class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-slate-300 mb-2">Search Users</label>
                             <input 
                                 type="text" 
+                                name="search"
                                 id="search-input"
                                 placeholder="Search by name, email, phone..." 
+                                value="${param.search}"
                                 class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
-                                onkeyup="filterUsers()"
                             >
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Status</label>
                             <select 
+                                name="status"
                                 id="filter-select"
                                 class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors"
-                                onchange="filterUsers()"
                             >
                                 <option value="all">All Users</option>
                                 <option value="pending">Pending Only</option>
@@ -130,36 +131,95 @@
                                 <option value="rejected">Rejected Only</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Sort By</label>
+                            <select 
+                                name="sort"
+                                id="sort-select"
+                                class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors"
+                            >
+                                <option value="date-desc">Newest First</option>
+                                <option value="date-asc">Oldest First</option>
+                                <option value="name-asc">Name A-Z</option>
+                                <option value="name-desc">Name Z-A</option>
+                            </select>
+                        </div>
                         <div class="flex items-end">
-                            <button onclick="refreshData()" class="w-full px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center">
+                            <button type="submit" class="w-full px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
-                                Refresh
+                                Search
                             </button>
                         </div>
                     </div>
-                </div>
+                </form>
 
                 <!-- Tabs -->
                 <div class="flex space-x-4 mb-6">
-                    <button onclick="switchTab('all')" class="px-6 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium transition-colors tab-btn active-tab">
+                    <a href="${pageContext.request.contextPath}/admin?status=all" class="px-6 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium transition-colors">
                         All Users
-                    </button>
-                    <button onclick="switchTab('pending')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin?status=pending" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
                         Pending
-                    </button>
-                    <button onclick="switchTab('approved')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin?status=approved" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
                         Approved
-                    </button>
-                    <button onclick="switchTab('rejected')" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors tab-btn">
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin?status=rejected" class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
                         Rejected
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Users List -->
                 <div id="users-list" class="space-y-4">
-                    <!-- Users will be rendered here -->
+                    <!-- Sample static user card (replace with JSTL c:forEach over users list from controller) -->
+                    <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/30 rounded-xl p-6 transition-all hover:shadow-lg hover:shadow-amber-500/10">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-4 flex-1">
+                                <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-lg font-bold text-amber-500">J</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-slate-100">John Doe</h3>
+                                    <p class="text-sm text-slate-400">john.doe@example.com</p>
+                                    <ul class="mt-1 space-y-0.5 list-none text-xs text-slate-500">
+                                        <li>Phone: +91 98765 43210</li>
+                                        <li>PAN: ABCDE1234F</li>
+                                        <li>Registered: 05/02/2026</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-500 border border-amber-500/20 whitespace-nowrap">
+                                    ⏱ Pending
+                                </span>
+                                <form action="${pageContext.request.contextPath}/admin/approve" method="post" class="inline">
+                                    <input type="hidden" name="userId" value="1" />
+                                    <button type="submit" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded-lg transition-colors">
+                                        Approve
+                                    </button>
+                                </form>
+                                <form action="${pageContext.request.contextPath}/admin/reject" method="post" class="inline">
+                                    <input type="hidden" name="userId" value="1" />
+                                    <button type="submit" class="px-4 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-lg transition-colors">
+                                        Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty state (show when no users match) -->
+                    <!--
+                    <div class="text-center py-16">
+                        <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-slate-100 mb-2">No Users Found</h3>
+                        <p class="text-slate-400">Try adjusting your search or filters</p>
+                    </div>
+                    -->
                 </div>
             </div>
         </main>
@@ -176,12 +236,62 @@
                     </button>
                 </div>
                 <div id="modal-content" class="p-6">
-                    <!-- Content will be populated -->
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-2xl font-bold text-white">J</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-100">John Doe</h3>
+                                <p class="text-sm text-slate-400">john.doe@example.com</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                            <p class="text-xs text-amber-500 mb-1">Status</p>
+                            <p class="text-sm font-medium text-amber-400">⏱ Pending Review</p>
+                        </div>
+
+                        <ul class="grid grid-cols-2 gap-4 list-none">
+                            <li class="p-3 bg-slate-950 rounded-lg">
+                                <p class="text-xs text-slate-500 mb-2">Phone</p>
+                                <p class="text-sm font-medium text-slate-300">+91 98765 43210</p>
+                            </li>
+                            <li class="p-3 bg-slate-950 rounded-lg">
+                                <p class="text-xs text-slate-500 mb-2">Registered</p>
+                                <p class="text-sm font-medium text-slate-300">05/02/2026</p>
+                            </li>
+                            <li class="p-3 bg-slate-950 rounded-lg">
+                                <p class="text-xs text-slate-500 mb-2">PAN Number</p>
+                                <p class="text-sm font-medium text-slate-300 font-mono">ABCDE1234F</p>
+                            </li>
+                            <li class="p-3 bg-slate-950 rounded-lg">
+                                <p class="text-xs text-slate-500 mb-2">Aadhaar</p>
+                                <p class="text-sm font-medium text-slate-300 font-mono">**** **** 5678</p>
+                            </li>
+                        </ul>
+
+                        <div class="pt-4 border-t border-slate-800">
+                            <div class="flex space-x-3">
+                                <form action="${pageContext.request.contextPath}/admin/approve" method="post" class="flex-1">
+                                    <input type="hidden" name="userId" value="1" />
+                                    <button type="submit" class="w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors">
+                                        Approve Account
+                                    </button>
+                                </form>
+                                <form action="${pageContext.request.contextPath}/admin/reject" method="post" class="flex-1">
+                                    <input type="hidden" name="userId" value="1" />
+                                    <button type="submit" class="w-full px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition-colors">
+                                        Reject Account
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="js/admin.js"></script>
 </body>
 </html>
