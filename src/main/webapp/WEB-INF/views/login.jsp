@@ -1,3 +1,4 @@
+<%@page import="in.cs.EnumClass.userStatus"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,6 +120,12 @@
             %>
             <h2 class="text-xl font-semibold text-slate-100 mb-6" style="color:red;"><%=msg %></h2>
             <%} %>
+              <%String message=(String)request.getAttribute("message");
+            if(message!=null){
+            %>
+            <h2 class="text-xl font-semibold text-slate-100 mb-6" style="color:red;"><%=message %></h2>
+            <%} %>
+           
             <!-- Login Form -->
             <form action="userLogin" method="POST" class="space-y-5">
            

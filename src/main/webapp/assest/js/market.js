@@ -169,9 +169,40 @@ var watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
 var currentFilter = 'all';
 var currentPage = 1;
 var ITEMS_PER_PAGE = 10;
+var basePath = (typeof contextPath !== 'undefined' && contextPath !== null) ? contextPath : (window.contextPath || '');
+
+function normalizeVolume(value) {
+    if (value === null || value === undefined) return 0;
+    if (typeof value === 'number') return value;
+    var cleaned = String(value).replace(/,/g, '').trim();
+    var parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? 0 : parsed;
+}
+
+function hydrateStocksFromServer() {
+    if (!window.serverStocks || !Array.isArray(window.serverStocks) || window.serverStocks.length === 0) {
+        return false;
+    }
+
+    allStocks = window.serverStocks.map(function(stock) {
+        return {
+            symbol: stock.symbol || '',
+            name: stock.name || '',
+            volume: normalizeVolume(stock.volume),
+            ltp: 0,
+            change: 0,
+            changePercent: 0
+        };
+    });
+
+    renderStocks();
+    fetchLivePrices();
+    return true;
+}
 
 function loadStocksFromJSON() {
-    fetch((window.contextPath || '') + '/stocks.json')
+    if (hydrateStocksFromServer()) return;
+    fetch(basePath + '/stocks.json')
         .then(function(response) {
             if (!response.ok) throw new Error('Failed to load');
             return response.json();
@@ -181,7 +212,7 @@ function loadStocksFromJSON() {
                 return {
                     symbol: stock.symbol,
                     name: stock.name,
-                    volume: stock.volume || 0,
+                    volume: normalizeVolume(stock.volume),
                     ltp: 0,
                     change: 0,
                     changePercent: 0
@@ -296,7 +327,7 @@ function renderStocks() {
         var sign = isPositive ? '+' : '';
         var inWatchlist = watchlist.includes(stock.symbol);
 
-        return '<tr class="hover:bg-slate-800/50 transition-all group animate-slideIn cursor-pointer" style="animation-delay: ' + (idx * 30) + 'ms" onclick="window.location.href=\'' + (window.contextPath || '') + '/chart?symbol=' + stock.symbol + '\'">' +
+        return '<tr class="hover:bg-slate-800/50 transition-all group animate-slideIn cursor-pointer" style="animation-delay: ' + (idx * 30) + 'ms" onclick="window.location.href=\'' + basePath + '/chart?symbol=' + stock.symbol + '\'">' +
                 '<td class="px-6 py-4">' +
                     '<div class="flex items-center space-x-3">' +
                         '<button onclick="toggleWatchlist(\'' + stock.symbol + '\', event); event.stopPropagation();" class="hover:scale-125 transition-transform">' +

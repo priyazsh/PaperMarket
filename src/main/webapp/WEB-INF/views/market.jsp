@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -277,7 +278,7 @@
 
 				<div
 					class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-					<table class="w-full">
+					<table class="w-full market-table">
 						<thead>
 							<tr class="border-b border-slate-800 bg-slate-800/30">
 								<th
@@ -297,6 +298,7 @@
 									class="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Action</th>
 							</tr>
 						</thead>
+						
 						<tbody id="stocks-tbody" class="divide-y divide-slate-800">
 							<tr>
 								<td colspan="7" class="px-6 py-4"><div
@@ -324,6 +326,32 @@
 				</div>
 			</div>
 
+			<script>
+				window.serverStocks = [
+					<%
+						List<?> stockList = (List<?>) request.getAttribute("list");
+						if (stockList != null && !stockList.isEmpty()) {
+							for (int i = 0; i < stockList.size(); i++) {
+								Object stock = stockList.get(i);
+								try {
+									Object symbol = stock.getClass().getMethod("getSymbol").invoke(stock);
+									Object name = stock.getClass().getMethod("getName").invoke(stock);
+									Object volume = stock.getClass().getMethod("getVolume").invoke(stock);
+									
+									String symbolStr = symbol != null ? symbol.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'") : "";
+									String nameStr = name != null ? name.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'") : "";
+									long volumeLong = volume != null ? ((Number) volume).longValue() : 0;
+									
+									out.print("{ symbol: \"" + symbolStr + "\", name: \"" + nameStr + "\", volume: " + volumeLong + " }");
+									if (i < stockList.size() - 1) out.print(",");
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					%>
+				];
+			</script>
 			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 			<script src="js/market.js"></script>
 </body>

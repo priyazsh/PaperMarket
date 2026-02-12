@@ -1,3 +1,6 @@
+<%@page import="in.cs.pojo.WalletTransaction"%>
+<%@page import="java.util.List"%>
+<%@page import="in.cs.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,8 +11,6 @@
     <link rel="stylesheet" href="css/funds.css">
 </head>
 <body class="bg-slate-950 min-h-screen">
-    <div id="toast-container" class="fixed top-4 right-4 z-[100] space-y-3"></div>
-
     <div class="flex h-screen">
         <jsp:include page="/WEB-INF/views/common/sidebar.jsp">
             <jsp:param name="activePage" value="funds"/>
@@ -31,7 +32,15 @@
                 </div>
             </header>
 
+<%
+User user=(User)session.getAttribute("loggedUser"); 
+long balance=0;
+if(user!=null){
+	balance=user.getBalance();
+}
+%>
             <div class="p-8">
+                <!-- Balance Card -->
                 <div class="balance-card rounded-3xl p-8 mb-8 shadow-2xl animate-slideUp relative">
                     <div class="relative z-10">
                         <div class="flex items-start justify-between">
@@ -42,7 +51,10 @@
                                     </svg>
                                     <span>Available Balance</span>
                                 </p>
-                                <h2 class="text-5xl font-bold text-white mb-1" id="available-balance">₹0.00</h2>
+                                <h2 class="text-5xl font-bold text-white mb-1">
+                                
+                                     ₹ <%=balance%>
+                                </h2>
                                 <p class="text-emerald-200 text-sm">Ready to invest</p>
                             </div>
                             <div class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
@@ -54,30 +66,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-                    <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.05s">
-                        <p class="text-slate-400 text-sm mb-1">Invested</p>
-                        <p id="invested-amount" class="text-xl font-bold text-white">₹0.00</p>
-                    </div>
-                    <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.1s">
-                        <p class="text-slate-400 text-sm mb-1">Total Deposits</p>
-                        <p id="total-deposits" class="text-xl font-bold text-white">₹0.00</p>
-                    </div>
-                    <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.15s">
-                        <p class="text-slate-400 text-sm mb-1">Total Withdrawals</p>
-                        <p id="total-withdrawals" class="text-xl font-bold text-white">₹0.00</p>
-                    </div>
-                    <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.2s">
-                        <p class="text-slate-400 text-sm mb-1">Active Positions</p>
-                        <p id="active-positions" class="text-xl font-bold text-white">0</p>
-                    </div>
-                    <div class="stat-card border border-slate-800 rounded-xl p-5 hover-lift animate-slideUp" style="animation-delay: 0.25s">
-                        <p class="text-slate-400 text-sm mb-1">Total Trades</p>
-                        <p id="total-trades" class="text-xl font-bold text-white">0</p>
-                    </div>
-                </div>
-
+                <!-- Forms Grid -->
                 <div class="grid grid-cols-2 gap-8">
+                    <!-- Add Funds Form -->
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover-lift animate-slideUp" style="animation-delay: 0.1s">
                         <div class="flex items-center space-x-4 mb-6">
                             <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
@@ -91,32 +82,35 @@
                             </div>
                         </div>
 
-                        <div class="space-y-5">
+                        <form onsubmit="startDeposit(event)" action="/wallet/create-order" method="POST" class="space-y-5">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Amount</label>
                                 <div class="relative">
                                     <span class="absolute left-4 top-4 text-slate-400 text-lg font-medium">₹</span>
                                     <input 
                                         type="number" 
+                                        name="amount"
+                                       
                                         id="add-amount"
                                         placeholder="0.00" 
                                         class="w-full pl-10 pr-4 py-4 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 text-lg font-semibold placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                         min="0"
                                         step="0.01"
+                                        required
                                     >
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-5 gap-2">
-                                <button onclick="setAmount('add', 1000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹1K</button>
-                                <button onclick="setAmount('add', 5000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹5K</button>
-                                <button onclick="setAmount('add', 10000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹10K</button>
-                                <button onclick="setAmount('add', 50000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹50K</button>
-                                <button onclick="setAmount('add', 100000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹1L</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('add-amount').value='1000'">₹1K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('add-amount').value='5000'">₹5K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('add-amount').value='10000'">₹10K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('add-amount').value='50000'">₹50K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/30 text-slate-300 hover:text-emerald-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('add-amount').value='100000'">₹1L</button>
                             </div>
 
                             <button 
-                                onclick="addFunds()"
+                                type="submit"
                                 class="w-full px-6 py-4 btn-primary text-white font-semibold rounded-xl flex items-center justify-center space-x-2"
                             >
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,9 +118,10 @@
                                 </svg>
                                 <span>Add Funds</span>
                             </button>
-                        </div>
+                        </form>
                     </div>
 
+                    <!-- Withdraw Funds Form -->
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover-lift animate-slideUp" style="animation-delay: 0.2s">
                         <div class="flex items-center space-x-4 mb-6">
                             <div class="w-14 h-14 bg-gradient-to-br from-rose-400 to-rose-600 rounded-xl flex items-center justify-center shadow-lg shadow-rose-500/20">
@@ -140,7 +135,7 @@
                             </div>
                         </div>
 
-                        <div class="space-y-5">
+                        <form action="withdraw" method="POST" class="space-y-5">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Amount</label>
                                 <div class="relative">
@@ -148,24 +143,26 @@
                                     <input 
                                         type="number" 
                                         id="withdraw-amount"
+                                        name="amount"
                                         placeholder="0.00" 
                                         class="w-full pl-10 pr-4 py-4 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 text-lg font-semibold placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition-all"
-                                        min="0"
-                                        step="0.01"
+                                        min="1"
+                                        step="1"
+                                        required
                                     >
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-5 gap-2">
-                                <button onclick="setAmount('withdraw', 1000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹1K</button>
-                                <button onclick="setAmount('withdraw', 5000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹5K</button>
-                                <button onclick="setAmount('withdraw', 10000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹10K</button>
-                                <button onclick="setAmount('withdraw', 50000)" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">₹50K</button>
-                                <button onclick="setAmount('withdraw', 'all')" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all">All</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('withdraw-amount').value='1000'">₹1K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('withdraw-amount').value='5000'">₹5K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('withdraw-amount').value='10000'">₹10K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="document.getElementById('withdraw-amount').value='50000'">₹50K</button>
+                                <button type="button" class="quick-btn px-3 py-2.5 bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/30 text-slate-300 hover:text-rose-400 text-sm font-medium rounded-lg border border-slate-700 transition-all" onclick="setMaxWithdraw()">All</button>
                             </div>
 
                             <button 
-                                onclick="withdrawFunds()"
+                                type="submit"
                                 class="w-full px-6 py-4 btn-danger text-white font-semibold rounded-xl flex items-center justify-center space-x-2"
                             >
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,10 +170,11 @@
                                 </svg>
                                 <span>Withdraw Funds</span>
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
+                <!-- Transaction History Table -->
                 <div class="mt-8 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden animate-slideUp" style="animation-delay: 0.3s">
                     <div class="p-6 border-b border-slate-800 flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -186,13 +184,11 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-semibold text-slate-100">Transaction History</h3>
-                                <p class="text-sm text-slate-400" id="transaction-count">0 transactions</p>
+                                <h3 class="text-lg font-semibold text-slate-100"n>Transaction History</h3>
+                                <p class="text-sm text-slate-400" id="transactio-count">0 transactions</p>
                             </div>
                         </div>
-                        <button onclick="clearHistory()" class="px-4 py-2 text-sm text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all">
-                            Clear History
-                        </button>
+                        
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -206,28 +202,147 @@
                                 </tr>
                             </thead>
                             <tbody id="transactions-tbody">
-                                <tr>
-                                    <td colspan="5" class="px-6 py-16 text-center">
-                                        <div class="w-20 h-20 mx-auto mb-4 bg-slate-800 rounded-full flex items-center justify-center">
-                                            <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                            </svg>
-                                        </div>
-                                        <h3 class="text-xl font-semibold text-slate-100 mb-2">No transactions yet</h3>
-                                        <p class="text-slate-400 mb-4">Add funds to start paper trading</p>
-                                        <button onclick="document.getElementById('add-amount').focus()" class="px-6 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500/20 transition-colors">
-                                            Add Your First Funds
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
+
+<%
+List<WalletTransaction> transactions =
+        (List<WalletTransaction>) request.getAttribute("list");
+
+    if (transactions == null || transactions.isEmpty()) {
+%>
+
+    
+    <tr>
+        <td colspan="5" class="px-6 py-16 text-center">
+            <h3 class="text-xl font-semibold text-slate-100 mb-2">
+                No transactions yet
+            </h3>
+            <p class="text-slate-400">
+                Add funds to start paper trading
+            </p>
+        </td>
+    </tr>
+
+<%
+} else {
+        for (WalletTransaction txn : transactions) {
+%>
+
+    
+    <tr class="border-b border-slate-800 text-slate-100">
+
+        <td class="text-left py-4 px-6">
+           <%=txn.getDatetime() %>
+           
+        </td>
+
+        <td class="text-left py-4 px-6">
+           <%=txn.getType() %>
+        </td>
+
+        <td class="text-left py-4 px-6">
+           <%=txn.getDescription() %>
+        </td>
+
+        <td class="text-right py-4 px-6">
+           <%=txn.getAmmount() %>
+        </td>
+
+        <td class="text-right py-4 px-6">
+          <%=txn.getBalance() %>
+        </td>
+
+    </tr>
+
+<%
+        }
+    }
+%>
+
+</tbody>
+
                         </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
-
-    <script src="js/funds.js"></script>
 </body>
 </html>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+   <script>
+        function setMaxWithdraw() {
+            var balance = <%= request.getAttribute("availableBalance") != null ? request.getAttribute("availableBalance") : 0.0 %>;
+            document.getElementById('withdraw-amount').value = balance.toFixed(2);
+        }
+</script>
+       
+<script>
+function startDeposit(event) {
+    event.preventDefault(); 
+
+    let amount = document.getElementById("add-amount").value;
+
+    if (!amount || amount <= 0) {
+        alert("Please enter valid amount");
+        return;
+    }
+
+    
+    fetch("<%=request.getContextPath()%>/create-order?amount=" + amount, {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(order => {
+
+        
+        var options = {
+            key: "rzp_test_RugB55jp26V8wq",
+            amount: order.amount,
+            currency: "INR",
+            order_id: order.id,
+
+            handler: function (response) {
+              
+                verifyPayment(response, amount);
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Order creation failed");
+    });
+}
+
+function verifyPayment(response, amount) {
+
+    fetch("<%=request.getContextPath()%>/verify", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body:
+            "razorpay_order_id=" + response.razorpay_order_id +
+            "&razorpay_payment_id=" + response.razorpay_payment_id +
+            "&razorpay_signature=" + response.razorpay_signature +
+            "&amount=" + amount
+    })
+    .then(() => {
+        alert("Deposit successful");
+         location.reload();  	
+        
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Payment verification failed");
+    });
+}
+</script>
+
+
+
+
+ 

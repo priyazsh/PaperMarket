@@ -1,3 +1,4 @@
+<%@page import="in.cs.EnumClass.userStatus"%>
 <%@page import="in.cs.pojo.User"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -43,8 +44,7 @@
 							stroke-linejoin="round" stroke-width="2"
 							d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                     </svg> <span>Users</span>
-				</a>
-				<a href="${pageContext.request.contextPath}/admin/stocks"
+				</a> <a href="${pageContext.request.contextPath}/admin/stocks"
 					class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors">
 					<svg class="w-5 h-5" fill="none" stroke="currentColor"
 						viewBox="0 0 24 24">
@@ -92,7 +92,7 @@
 							registrations</p>
 					</div>
 				</div>
-				<
+
 				<!-- Stats Grid -->
 				<div class="grid grid-cols-4 gap-4">
 					<div class="bg-slate-950 border border-slate-800 rounded-lg p-4">
@@ -101,71 +101,37 @@
 					</div>
 					<div class="bg-slate-950 border border-amber-500/20 rounded-lg p-4">
 						<p class="text-xs text-amber-500 mb-1">Pending</p>
-						<p class="text-2xl font-bold text-amber-500">${pendingCount}</p>
+						<p class="text-2xl font-bold text-amber-500">${pendingUsers}</p>
 					</div>
 					<div
 						class="bg-slate-950 border border-emerald-500/20 rounded-lg p-4">
 						<p class="text-xs text-emerald-500 mb-1">Approved</p>
-						<p class="text-2xl font-bold text-emerald-500">${approvedCount}</p>
+						<p class="text-2xl font-bold text-emerald-500">${approvedUsers}</p>
 					</div>
 					<div class="bg-slate-950 border border-rose-500/20 rounded-lg p-4">
 						<p class="text-xs text-rose-500 mb-1">Rejected</p>
-						<p class="text-2xl font-bold text-rose-500">${rejectedCount}</p>
+						<p class="text-2xl font-bold text-rose-500">${cancleUsers}</p>
 					</div>
 				</div>
 			</header>
 
 			<!-- Content -->
 			<div class="p-8">
-				<!-- Search and Filters -->
-				<form action="${pageContext.request.contextPath}/admin" method="get"
-					class="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
-					<div class="flex flex-col md:flex-row gap-4">
-						<div class="flex-1">
-							<label class="block text-sm font-medium text-slate-300 mb-2">Search
-								Users</label> <input type="text" name="search" id="search-input"
-								placeholder="Search by name, email, phone..."
-								value="${param.search}"
-								class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
-						</div>
-						<div>
-							<label class="block text-sm font-medium text-slate-300 mb-2">Filter
-								by Status</label> <select name="status" id="filter-select"
-								class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors">
-								<option value="all">All Users</option>
-								<option value="pending">Pending Only</option>
-								<option value="approved">Approved Only</option>
-								<option value="rejected">Rejected Only</option>
-							</select>
-						</div>
-						<div class="flex items-end">
-							<button type="submit"
-								class="w-full px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center">
-								<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-									viewBox="0 0 24 24">
-                                    <path stroke-linecap="round"
-										stroke-linejoin="round" stroke-width="2"
-										d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-								Search
-							</button>
-						</div>
-					</div>
-				</form>
 
 				<!-- Tabs -->
 				<div class="flex space-x-4 mb-6">
-					<a href="allData"
-						class="px-6 py-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg font-medium transition-colors">
+					<a
+						href="${pageContext.request.contextPath}/userApproval?status=all"
+						class="px-6 py-3 bg-emerald-500/10 text-emerald-500 rounded-lg">
 						All Users </a> <a
-						href="pendingUser"
-						class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
+						href="${pageContext.request.contextPath}/userApproval?status=pending"
+						class="px-6 py-3 text-slate-400 hover:bg-slate-800 rounded-lg">
 						Pending </a> <a
-						href="approvedUser"
-						class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
+						href="${pageContext.request.contextPath}/userApproval?status=approved"
+						class="px-6 py-3 text-slate-400 hover:bg-slate-800 rounded-lg">
 						Approved </a> <a
-						href="rejectUser"
-						class="px-6 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800 border border-slate-800 rounded-lg font-medium transition-colors">
+						href="${pageContext.request.contextPath}/userApproval?status=rejected"
+						class="px-6 py-3 text-slate-400 hover:bg-slate-800 rounded-lg">
 						Rejected </a>
 				</div>
 
@@ -219,22 +185,24 @@
                          bg-amber-500/10 text-amber-500 border border-amber-500/20">
 									⏱ <%=u.getStatus()%>
 								</span>
-
-								<form action="<%=request.getContextPath()%>/admin/approve"
-									method="post">
-									<input type="hidden" name="userId" value="<%=u.getId()%>" />
-									<button
+								<%
+								if (u.getStatus() == userStatus.PENDING) {
+								%>
+								<form action="updateStatus" method="post">
+									<input type="hidden" name="userId" value="<%=u.getId()%>" /> <input
+										type="hidden" name="email" value="<%=u.getEmail()%>" />
+									<button type="submit" name="status" value="APPROVED"
 										class="px-4 py-1.5 bg-emerald-500 text-white text-xs rounded-lg">
 										Approve</button>
-								</form>
 
-								<form action="<%=request.getContextPath()%>/admin/reject"
-									method="post">
-									<input type="hidden" name="userId" value="<%=u.getId()%>" />
-									<button
+									<button type="submit" name="status" value="CANCLED"
 										class="px-4 py-1.5 bg-rose-500 text-white text-xs rounded-lg">
 										Reject</button>
 								</form>
+
+								<%
+								}
+								%>
 
 							</div>
 						</div>
@@ -251,92 +219,9 @@
 					}
 					%>
 
-
 				</div>
 			</div>
 		</main>
-
-		<!-- User Details Modal -->
-		<div id="modal-overlay"
-			class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-			<div
-				class="bg-slate-900 border border-slate-800 rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
-				<div
-					class="sticky top-0 bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-					<h2 class="text-xl font-bold text-slate-100">User Details</h2>
-					<button onclick="closeModal()"
-						class="text-slate-400 hover:text-slate-100">
-						<svg class="w-6 h-6" fill="none" stroke="currentColor"
-							viewBox="0 0 24 24">
-                            <path stroke-linecap="round"
-								stroke-linejoin="round" stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-					</button>
-				</div>
-				<div id="modal-content" class="p-6">
-					<div class="space-y-6">
-						<div class="flex items-center space-x-4">
-							<div
-								class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
-								<span class="text-2xl font-bold text-white">J</span>
-							</div>
-							<div>
-								<h3 class="text-xl font-bold text-slate-100">John Doe</h3>
-								<p class="text-sm text-slate-400">john.doe@example.com</p>
-							</div>
-						</div>
-
-						<div
-							class="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-							<p class="text-xs text-amber-500 mb-1">Status</p>
-							<p class="text-sm font-medium text-amber-400">⏱ Pending
-								Review</p>
-						</div>
-
-						<ul class="grid grid-cols-2 gap-4 list-none">
-							<li class="p-3 bg-slate-950 rounded-lg">
-								<p class="text-xs text-slate-500 mb-2">Phone</p>
-								<p class="text-sm font-medium text-slate-300">+91 98765
-									43210</p>
-							</li>
-							<li class="p-3 bg-slate-950 rounded-lg">
-								<p class="text-xs text-slate-500 mb-2">Registered</p>
-								<p class="text-sm font-medium text-slate-300">05/02/2026</p>
-							</li>
-							<li class="p-3 bg-slate-950 rounded-lg">
-								<p class="text-xs text-slate-500 mb-2">PAN Number</p>
-								<p class="text-sm font-medium text-slate-300 font-mono">ABCDE1234F</p>
-							</li>
-							<li class="p-3 bg-slate-950 rounded-lg">
-								<p class="text-xs text-slate-500 mb-2">Aadhaar</p>
-								<p class="text-sm font-medium text-slate-300 font-mono">****
-									**** 5678</p>
-							</li>
-						</ul>
-
-						<div class="pt-4 border-t border-slate-800">
-							<div class="flex space-x-3">
-								<form action="${pageContext.request.contextPath}/admin/approve"
-									method="post" class="flex-1">
-									<input type="hidden" name="userId" value="1" />
-									<button type="submit"
-										class="w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors">
-										Approve Account</button>
-								</form>
-								<form action="${pageContext.request.contextPath}/admin/reject"
-									method="post" class="flex-1">
-									<input type="hidden" name="userId" value="1" />
-									<button type="submit"
-										class="w-full px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-lg transition-colors">
-										Reject Account</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 
 </body>

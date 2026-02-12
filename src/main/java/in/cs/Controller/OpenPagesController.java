@@ -50,20 +50,14 @@ public class OpenPagesController {
 		return "holdings";
 	}
 
-	@GetMapping("/market")
-	public String openMarket() {
-		return "market";
-	}
+	
 
 	@GetMapping("/chart")
 	public String openChart() {
 		return "chart";
 	}
 
-	@GetMapping("/funds")
-	public String openFunds() {
-		return "funds";
-	}
+	
 
 	@GetMapping("/orders")
 	public String openOrders() {
@@ -73,7 +67,7 @@ public class OpenPagesController {
 
 	@GetMapping("/admin")
 	public String openAdmin() {
-		return "admin";
+		return "redirect:/userApproval";
 	}
 
 
@@ -82,10 +76,7 @@ public class OpenPagesController {
 		return "index";
 	}
 	
-	@GetMapping("/admin/stocks")
-	public String openAdminStocks() {
-		return "stocks";
-	}
+	
 
 
 	@GetMapping("/terms")

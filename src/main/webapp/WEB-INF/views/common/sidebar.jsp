@@ -52,28 +52,7 @@
         </a>
     </nav>
 
-<% String photo = (String) request.getAttribute("photo");
-if(photo!=null){
-%>
 
-<!-- User Profile -->
-    div class="p-4 border-t border-slate-800/50">
-    <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
-        
-        <!-- Profile Picture -->
-        <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full overflow-hidden shadow-lg shadow-emerald-500/20">
-            
-            <img src="<%= request.getContextPath() %>/assest/dp/<%=photo %>"
-                 alt="User Photo"
-                 class="w-full h-full object-cover" />
-
-        </div>
-
-    </div>
-</div>
-
-
-<%}else{ %>
     <!-- User Profile -->
     <div class="p-4 border-t border-slate-800/50">
         <div class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all duration-300 group">
@@ -84,7 +63,7 @@ if(photo!=null){
                 </svg>
             </div>
             
-            <%} %>
+           
             <%    
             String name = (String) request.getAttribute("name");
          
@@ -101,7 +80,7 @@ if(photo!=null){
                 <p class="text-sm font-medium text-slate-100 truncate">My Account</p>
                 <p class="text-xs text-slate-500">Trader</p>
             </div>
-            <%} %>
+            <%}%>
             <!-- Logout Button -->
             <a href="logout" class="p-2 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all duration-300" title="Logout">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

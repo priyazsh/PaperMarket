@@ -1,4 +1,7 @@
+<%@page import="in.cs.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,6 +124,7 @@
                 <h2 class="text-xl font-semibold text-slate-100">Create your account</h2>
             </div>
             
+            
             <!-- Register Form -->
             <form action="register" method="POST" enctype="multipart/form-data" class="space-y-5" id="registerForm">
                 <!-- CSRF Token (if using Spring Security) -->
@@ -135,12 +139,23 @@
                         type="text" 
                         id="fullName" 
                         name="name"
-                        required
+                        value="${user.name}"
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                         placeholder="John Doe"
-                        value="${param.fullName}"
+                        value=""
                     >
                 </div>
+
+<%String message=(String)request.getAttribute("msg");
+
+if(message!=null){
+%>
+
+<div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-slate-100" style="color:red;"><%=message %></h2>
+            </div>
+            
+<%} %>
 
                 <!-- Email Field + OTP -->
                 <div>
@@ -150,35 +165,87 @@
                             type="email" 
                             id="email" 
                             name="email"
-                            required
+                             required
                             class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="you@example.com"
-                            value="${param.email}"
+                            value="${user.email}
+                            "
+                            
                         >
-                        <button 
-                            type="button" 
-                            id="sendOtpBtn"
-                            class="btn-shine px-5 py-3.5 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-600 rounded-xl text-slate-100 text-sm font-semibold transition-all duration-300 whitespace-nowrap"
-                        >
-                            Send OTP
-                        </button>
+                        <%
+Boolean OtpSent = (Boolean) session.getAttribute("otpSent");
+%>
+
+<button 
+    type="submit" 
+    name="bt"
+    value="sendOtp"
+    class="btn-shine px-5 py-3.5 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-600 rounded-xl text-slate-100 text-sm font-semibold transition-all duration-300 whitespace-nowrap">
+    
+    <%= (OtpSent != null && OtpSent) ? "Resend OTP" : "Send OTP" %>
+
+</button>
+
                     </div>
-                    <p id="otpHint" class="text-xs text-slate-500 mt-2 hidden">OTP sent. Please check your inbox.</p>
+                    
+                    <%String otpMessage=(String)request.getAttribute("otpMessage");
+if(otpMessage!=null){%>
+
+                    <p id="otpHint" class="text-xs text-slate-500 mt-2 hidden"><%=otpMessage %></p>
+<%
+}
+%>
                 </div>
 
                 <!-- OTP Box (Hidden until Send OTP) -->
-                <div id="otpBox" class="hidden">
+                <%
+Boolean otpSent = (Boolean) session.getAttribute("otpSent");
+%>
+<%
+Boolean otpVerified = (Boolean) session.getAttribute("otpVerified");
+%>
+
+
+              <div id="otpBox" class="<%= (otpSent != null && otpSent) ? "" : "hidden" %>">
                     <label for="otp" class="block text-sm font-medium text-slate-300 mb-2">Enter OTP *</label>
-                    <input 
-                        type="text" 
-                        id="otp" 
-                        name="otp"
-                        inputmode="numeric"
-                        pattern="[0-9]{4,6}"
-                        maxlength="6"
-                        class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300 tracking-widest"
-                        placeholder="Enter 4-6 digit OTP"
-                    >
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            type="text" 
+                            id="otp" 
+                            name="otp"
+                           
+                            inputmode="numeric"
+                            pattern="[0-9]{4,6}"
+                            maxlength="6"
+                            class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300 tracking-widest"
+                            placeholder="Enter 4-6 digit OTP">
+                        <button 
+    type="submit"
+    name="bt"
+    value="verifyOtp"
+    <%= (otpVerified != null && otpVerified) ? "disabled" : "" %>
+    class="btn-shine px-5 py-3.5 border rounded-xl text-sm font-semibold whitespace-nowrap
+    <%= (otpVerified != null && otpVerified) ? 
+        "bg-emerald-500/20 border-emerald-500 text-emerald-400 cursor-not-allowed" :
+        "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 text-emerald-400" %>">
+    <%= (otpVerified != null && otpVerified) ? "Verified ✓" : "Verify OTP" %>
+</button>
+
+                    </div>
+<%
+String verifyMsg = (String)request.getAttribute("message");
+if(verifyMsg != null){
+    boolean success = verifyMsg.equalsIgnoreCase("Verification Done");
+%>
+
+<p class="text-sm mt-2 font-semibold 
+    <%= success ? "text-emerald-400" : "text-red-400" %>">
+    <%= verifyMsg %>
+</p>
+
+<% } %>
+
+
                 </div>
 
                 <!-- Phone Number Field -->
@@ -190,11 +257,11 @@
                             type="tel" 
                             id="phone" 
                             name="phone"
-                            required
+                           
                             pattern="[0-9]{10}"
                             class="w-full pl-14 pr-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="9876543210"
-                            value="${param.phone}"
+                            value="${user.phone}"
                         >
                     </div>
                     <p class="text-xs text-slate-500 mt-1.5">Enter 10-digit mobile number</p>
@@ -208,7 +275,7 @@
                             type="password" 
                             id="password" 
                             name="password"
-                            required
+                           value="${user.password}"
                             minlength="8"
                             oninput="checkPasswordStrength(this.value)"
                             class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
@@ -241,7 +308,7 @@
                             type="password" 
                             id="confirmPassword" 
                             name="confirmPassword"
-                            required
+                            value="${user.confirmPassword}"
                             minlength="8"
                             class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300" 
                             placeholder="••••••••"
@@ -262,13 +329,13 @@
                         type="text" 
                         id="panCard" 
                         name="panCard"
-                        required
+                       
                         pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
                         maxlength="10"
                         oninput="this.value = this.value.toUpperCase()"
                         class="w-full px-4 py-3.5 bg-slate-950/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 uppercase focus:outline-none focus:border-emerald-500 input-glow transition-all duration-300 tracking-wider font-mono" 
                         placeholder="ABCDE1234F"
-                        value="${param.panCard}"
+                        value="${user.panCard}"
                     >
                     <p class="text-xs text-slate-500 mt-1.5">Format: ABCDE1234F</p>
                 </div>
@@ -295,7 +362,7 @@
                                 type="file" 
                                 id="photo" 
                                 name="photo"
-                                required
+                                
                                 accept="image/*"
                                 class="hidden"
                                 onchange="handlePhotoUpload(event)"
@@ -308,7 +375,7 @@
                 <!-- Terms & Conditions -->
                 <div class="pt-2">
                     <label class="flex items-start cursor-pointer group">
-                        <input type="checkbox" name="terms" required class="w-5 h-5 mt-0.5 rounded-md border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
+                        <input type="checkbox" name="terms" class="w-5 h-5 mt-0.5 rounded-md border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer">
                         <span class="ml-3 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
                             I agree to the <a href="#" class="text-emerald-400 hover:text-emerald-300 font-medium">Terms of Service</a> and 
                             <a href="#" class="text-emerald-400 hover:text-emerald-300 font-medium">Privacy Policy</a>
@@ -319,6 +386,8 @@
                 <!-- Sign Up Button -->
                 <button 
                     type="submit" 
+                    name="bt"
+                    value="register"
                     class="btn-shine w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
                 >
                     Create Account
@@ -417,7 +486,7 @@
         }
 
         sendOtpBtn.addEventListener('click', function() {
-            const email = emailInput.value.trim();
+         /*    const email = emailInput.value.trim();
             if (!isValidEmail(email)) {
                 alert('Please enter a valid email address before sending OTP.');
                 emailInput.focus();
@@ -426,35 +495,70 @@
             otpBox.classList.remove('hidden');
             otpHint.classList.remove('hidden');
             const otpInput = document.getElementById('otp');
-            if (otpInput) otpInput.focus();
+            if (otpInput) otpInput.focus(); */
+        });
+	
+	       
+     // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+
+            const clickedButton = document.activeElement.value;
+
+            // If Send OTP or Verify OTP clicked → skip full validation
+            if (clickedButton === "sendOtp" || clickedButton === "verifyOtp") {
+                return true;
+            }
+
+            // If Register clicked → validate everything manually
+            if (clickedButton === "register") {
+
+                const name = document.getElementById('fullName').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const panCard = document.getElementById('panCard').value.toUpperCase();
+                const photo = document.getElementById('photo').files.length;
+                const terms = document.querySelector('input[name="terms"]').checked;
+
+                if (name === "" || phone === "" || password === "" || confirmPassword === "" || panCard === "") {
+                    e.preventDefault();
+                    alert("Please fill all fields before registering.");
+                    return false;
+                }
+
+                if (!terms) {
+                    e.preventDefault();
+                    alert("Please accept Terms & Conditions.");
+                    return false;
+                }
+
+                if (photo === 0) {
+                    e.preventDefault();
+                    alert("Please upload profile photo.");
+                    return false;
+                }
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert("Passwords do not match!");
+                    return false;
+                }
+
+                const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                if (!panRegex.test(panCard)) {
+                    e.preventDefault();
+                    alert("Invalid PAN format. Use ABCDE1234F");
+                    return false;
+                }
+
+                if (phone.length !== 10) {
+                    e.preventDefault();
+                    alert("Enter valid 10-digit phone number.");
+                    return false;
+                }
+            }
         });
 
-        // Form validation
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-                return false;
-            }
-            
-            const panCard = document.getElementById('panCard').value.toUpperCase();
-            const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-            if (!panRegex.test(panCard)) {
-                e.preventDefault();
-                alert('Invalid PAN card format. Please use format: ABCDE1234F');
-                return false;
-            }
-            
-            const phone = document.getElementById('phone').value;
-            if (phone.length !== 10) {
-                e.preventDefault();
-                alert('Please enter a valid 10-digit phone number');
-                return false;
-            }
-        });
     </script>
 </body>
 </html>
