@@ -30,7 +30,7 @@ public class WalletTransaction {
 
 	private String description;
 	private long ammount;
-	private long balance;
+	private double balance;
 
 	@ManyToOne
 	@JoinColumn( nullable = false)
@@ -42,7 +42,7 @@ public class WalletTransaction {
 	}
  
 	public WalletTransaction(int id, LocalDateTime datetime, TrasactionType type, String description, long ammount,
-			long balance, User user) {
+			double balance, User user) {
 		super();
 		this.id = id;
 		this.datetime = datetime;
@@ -93,11 +93,12 @@ public class WalletTransaction {
 		this.ammount = ammount;
 	}
 
-	public long getBalance() {
+	
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(long balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 

@@ -108,13 +108,30 @@ function updateOrderValue() {
 }
 
 function placeOrder() {
-    if (!currentTradeStock) return;
-    var qty = parseInt(document.getElementById('quantity-input').value) || 1;
-    var total = currentTradeStock.price * qty;
 
-    closeTradeModal();
-    showToast((currentTradeType === 'buy' ? 'Bought' : 'Sold') + ' ' + qty + ' shares of ' + currentTradeStock.symbol + ' for ₹' + total.toLocaleString('en-IN', {minimumFractionDigits: 2}), 'success');
+    if (!currentTradeStock) return;
+
+    var qty = parseInt(document.getElementById('quantity-input').value) || 1;
+
+	fetch(basePath + '/trade/' + currentTradeType, {
+	    method: 'POST',
+	    headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded'
+	    },
+	    body: 'symbol=' + encodeURIComponent(currentTradeStock.symbol) +
+	          '&quantity=' + encodeURIComponent(qty)
+	})
+
+    .then(response => response.text())
+    .then(data => {
+        closeTradeModal();
+        showToast(data, 'success');
+    })
+    .catch(error => {
+        showToast("Trade failed", 'error');
+    });
 }
+
 
 function fetchMarketData(symbol, elementId, displayName) {
     var corsProxy = 'https://corsproxy.io/?';

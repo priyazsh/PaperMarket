@@ -54,19 +54,17 @@ public class User {
 	
 	@OneToMany(mappedBy = "user",cascade=CascadeType.ALL)
 	private List<UserHolding> userhold;
-	
-	private long balance;
+	@Column(scale=2)
+	private double balance;
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-
-
 	public User(int id, String name, String email, String phone, String password, String confirmPassword,
 			String panCard, LocalDateTime createdAt, String photo, userStatus status, Role role,
-			List<WalletTransaction> list, List<TradeTransaction> tt, List<UserHolding> userhold, long balance) {
+			List<WalletTransaction> list, List<TradeTransaction> tt, List<UserHolding> userhold, double balance) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -85,187 +83,125 @@ public class User {
 		this.balance = balance;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}
-
-
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
-
 	public String getName() {
 		return name;
 	}
-
-
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
-
 	public String getEmail() {
 		return email;
 	}
-
-
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-
-
 	public String getPhone() {
 		return phone;
 	}
-
-
 
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
-
-
 	public String getPassword() {
 		return password;
 	}
-
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
-
-
 
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
 
-
-
 	public String getPanCard() {
 		return panCard;
 	}
-
-
 
 	public void setPanCard(String panCard) {
 		this.panCard = panCard;
 	}
 
-
-
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
-
-
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-
-
 	public String getPhoto() {
 		return photo;
 	}
-
-
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 
-
-
 	public userStatus getStatus() {
 		return status;
 	}
-
-
 
 	public void setStatus(userStatus status) {
 		this.status = status;
 	}
 
-
-
 	public Role getRole() {
 		return role;
 	}
-
-
 
 	public void setRole(Role role) {
 		this.role = role;
 	}
 
-
-
 	public List<WalletTransaction> getList() {
 		return list;
 	}
-
-
 
 	public void setList(List<WalletTransaction> list) {
 		this.list = list;
 	}
 
-
-
 	public List<TradeTransaction> getTt() {
 		return tt;
 	}
-
-
 
 	public void setTt(List<TradeTransaction> tt) {
 		this.tt = tt;
 	}
 
-
-
 	public List<UserHolding> getUserhold() {
 		return userhold;
 	}
-
-
 
 	public void setUserhold(List<UserHolding> userhold) {
 		this.userhold = userhold;
 	}
 
-
-
-	public long getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-
-
-	public void setBalance(long balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -273,6 +209,8 @@ public class User {
 				+ ", confirmPassword=" + confirmPassword + ", panCard=" + panCard + ", createdAt=" + createdAt
 				+ ", photo=" + photo + ", status=" + status + ", role=" + role + ", balance=" + balance + "]";
 	}
+
+
 
 	
 

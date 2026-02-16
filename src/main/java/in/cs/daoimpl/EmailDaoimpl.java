@@ -20,8 +20,8 @@ public class EmailDaoimpl implements EmailDao{
 	@Override
 	public void sendEmail(String setMessage,String email,String Subject) {
 		
-		String SendEmailFrom = "papermarket@is-a.software";
-		String Passkey = "nice-try";
+		String SendEmailFrom = "projectuse344@gmail.com";
+		String Passkey = "zrcybzhxvoqmzzrl";
 		
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");

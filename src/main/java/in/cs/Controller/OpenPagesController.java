@@ -45,10 +45,6 @@ public class OpenPagesController {
 		return "approval";
 	}
 
-	@GetMapping("/holdings")
-	public String openHoldings() {
-		return "holdings";
-	}
 
 	
 

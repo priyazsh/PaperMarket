@@ -21,8 +21,8 @@ import in.cs.pojo.User;
 public class PaymentDaoImpl implements PaymentDao{
 
   
-	private static final String KEY="rzp_test_RugB55jp26V8wq";
-	private static final String SECRET="LKFA8T5SimSCMVFbks5JeddT";
+	private static final String KEY="rzp_****_********";
+	private static final String SECRET="YYxjif*************";
 	
 	@Autowired
 	private userDao userdao;
@@ -59,8 +59,8 @@ public class PaymentDaoImpl implements PaymentDao{
 
 	        User user = userdao.findUserById(userid);
 	        if(user!=null) {
-	        long Oldbalance = user.getBalance();
-	        long newbalance=Oldbalance+amount;
+	        double Oldbalance = user.getBalance();
+	        double newbalance=Oldbalance+amount;
 	       	user.setBalance(newbalance);
 	        userdao.updateUser(user);
 	        System.out.println(user.getBalance());
@@ -85,8 +85,8 @@ public class PaymentDaoImpl implements PaymentDao{
 	public boolean withdraw(int id,long amount) {
 		User user = userdao.findUserById(id);
 		if(user!=null) {
-			long oldbalance = user.getBalance();
-			long newbalance= oldbalance-amount;
+			double oldbalance = user.getBalance();
+			double newbalance= oldbalance-amount;
 			user.setBalance(newbalance);
 			userdao.updateUser(user);
 			

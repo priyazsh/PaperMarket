@@ -34,7 +34,7 @@
 
 <%
 User user=(User)session.getAttribute("loggedUser"); 
-long balance=0;
+double balance=0;
 if(user!=null){
 	balance=user.getBalance();
 }
@@ -297,7 +297,7 @@ function startDeposit(event) {
 
         
         var options = {
-            key: "rzp_test_RugB55jp26V8wq",
+            key: "rzp_test_SFYLjoCGxfFhpx",
             amount: order.amount,
             currency: "INR",
             order_id: order.id,

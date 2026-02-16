@@ -8,4 +8,6 @@ public interface StocksDao {
 	public boolean addStocks(Stocks stock);
 	public boolean deleteStock(String Symbol);
 	public List<Stocks> totalStock();
+	 public Stocks FindStockBySymbol(String symbol);
+	 public double getLivePrice(String symbol);
 }

@@ -30,8 +30,9 @@ public class TradeTransaction {
 	private Stocks stock;
 
 	private int quantity;
-	private long price;
-	private long totalammount;
+	@Column(name="basePrice")
+	private double price;
+	private double totalammount;
 	
 	@Enumerated(EnumType.STRING)
 	private SellBuyType type;
@@ -45,7 +46,7 @@ public class TradeTransaction {
 		// TODO Auto-generated constructor stub
 	}
 
-	public TradeTransaction(int id, User user, Stocks stock, int quantity, long price, long totalammount,
+	public TradeTransaction(int id, User user, Stocks stock, int quantity, double price, double totalammount,
 			SellBuyType type, LocalDateTime trade_time) {
 		super();
 		this.id = id;
@@ -90,19 +91,22 @@ public class TradeTransaction {
 		this.quantity = quantity;
 	}
 
-	public long getPrice() {
+
+
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
-	public long getTotalammount() {
+
+	public double getTotalammount() {
 		return totalammount;
 	}
 
-	public void setTotalammount(long totalammount) {
+	public void setTotalammount(double totalammount) {
 		this.totalammount = totalammount;
 	}
 
